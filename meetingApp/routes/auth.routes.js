@@ -86,7 +86,7 @@ router.get("/confirmations/:token", (req, res) => {
       console.log(user.isVerified);
       user.save();
       req.login(user, () =>
-        res.render("personalAccount", {
+        res.render("auth/personalAccount", {
           user: user,
         })
       );
@@ -94,4 +94,28 @@ router.get("/confirmations/:token", (req, res) => {
   });
 });
 
+//Login
+router.get("/login", (req, res) => {
+  res.render("auth/login", { errorArr: req.flash("error") });
+});
+
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/private-page",
+    failureRedirect: "/login",
+    failureFlash: true,
+    passReqToCallback: true,
+  })
+);
+//Logout
+router.get("/logout", (req, res) => {
+  req.logOut();
+  res.render("auth/logout");
+});
+
+router.get("/private-page", (req, res) => {
+  console.log(req.user);
+  res.render("auth/personalAccount",{user: req.user});
+});
 module.exports = router;

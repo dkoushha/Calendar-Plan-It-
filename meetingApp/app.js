@@ -18,9 +18,9 @@ const app_name = require("./package.json").name;
 const debug = require("debug")(
   `${app_name}:${path.basename(__filename).split(".")[0]}`
 );
-
+const flash = require("connect-flash");
 const app = express();
-
+app.use(flash());
 //mongoose
 mongoose
   .connect("mongodb://localhost/meetingapp", {
@@ -95,9 +95,9 @@ passport.use(
     {
       usernameField: "email",
     },
-    (username, password, callback) => {
+    (email, password, callback) => {
       User.findOne({
-        username,
+        email,
       })
         .then((user) => {
           if (!user) {
