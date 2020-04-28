@@ -8,7 +8,7 @@ mongoose.connect(`mongodb://localhost/meetingApp`, {
 });
 
 const users = [{
-    username: "dima",
+    email: "dima",
     password: "12345",
 
 }];

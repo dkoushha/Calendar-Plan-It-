@@ -1,0 +1,11 @@
+{{!-- kldjf --}}
+{{#each errors}}
+<p style="color: red;">{{this.msg}}</p>
+{{/each}}
+
+<form action="/signup" method="post">
+    <input type="email" name="email" placeholder="your email">
+    <input type="password" name='password' placeholder="password">
+    <button type="submit">Sign up</button>
+
+</form>

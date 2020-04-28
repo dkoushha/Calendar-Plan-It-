@@ -8,14 +8,25 @@
     "dev-windows": "nodemon ./bin/www"
   },
   "dependencies": {
+    "bcrypt": "^4.0.1",
     "body-parser": "^1.18.3",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^3.2.0",
     "cookie-parser": "^1.4.3",
+    "crypto-js": "^4.0.0",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
+    "express-session": "^1.17.1",
+    "express-validator": "^6.4.0",
+    "flash": "^1.1.0",
     "hbs": "^4.0.1",
     "mongoose": "^5.2.10",
     "morgan": "^1.9.0",
     "node-sass-middleware": "^0.11.0",
+    "nodemailer": "^6.4.6",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "random-token": "0.0.8",
     "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
