@@ -18,9 +18,8 @@ const app_name = require("./package.json").name;
 const debug = require("debug")(
   `${app_name}:${path.basename(__filename).split(".")[0]}`
 );
-const flash = require("connect-flash");
+
 const app = express();
-app.use(flash());
 
 //mongoose
 mongoose
@@ -92,13 +91,14 @@ passport.deserializeUser((id, callback) => {
 });
 // passport localStrategy
 passport.use(
-  new LocalStrategy({
+  new LocalStrategy(
+    {
       usernameField: "email",
     },
     (username, password, callback) => {
       User.findOne({
-          username,
-        })
+        username,
+      })
         .then((user) => {
           if (!user) {
             return callback(null, false, {
