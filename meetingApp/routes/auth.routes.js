@@ -42,9 +42,7 @@ router.post("/signup", signUpValidation, (req, res) => {
     _userId: user._id,
     token: randomToken(16),
   });
-  console.log(token);
   token.save();
-
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -78,20 +76,23 @@ router.post("/signup", signUpValidation, (req, res) => {
 router.get("/confirmations/:token", (req, res) => {
   Token.findOne({
     token: req.params.token,
-  }).then((token) => {
-    User.findOne({
-      _id: token._userId,
-    }).then((user) => {
+  })
+    .then((token) => {
+      return User.findOne({
+        _id: token._userId,
+      });
+    })
+    .then((user) => {
       user.isVerified = true;
-      console.log(user.isVerified);
-      user.save();
+      return user.save();
+    })
+    .then((user) => {
       req.login(user, () =>
         res.render("personalAccount", {
           user: user,
         })
       );
     });
-  });
 });
 
 module.exports = router;
