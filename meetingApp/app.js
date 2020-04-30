@@ -23,10 +23,7 @@ const flash = require("connect-flash");
 const app = express();
 app.use(flash());
 
-const avatarsMiddleware = require('adorable-avatars');
 
-
-app.use('/myAvatars', avatarsMiddleware);
 
 //mongoose
 mongoose
