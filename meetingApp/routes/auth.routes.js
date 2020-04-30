@@ -18,6 +18,9 @@ const {
 const signUpValidation = require("../helpers/middlewares").signUpValidation;
 // nodemailer
 const nodemailer = require("nodemailer");
+//axios
+const axios = require("axios");
+const URL = "http://localhost:3000/";
 
 router.get("/signup", (req, res) => {
   res.render("auth/signup");
@@ -122,9 +125,37 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/private-page", (req, res) => {
-  console.log(req.user);
-  res.render("auth/personalAccount", {
-    user: req.user
-  });
+
+  
+  //API Key:EUU8LOIMTSKG
+  axios
+    .get(
+      "http://api.timezonedb.com/v2.1/list-time-zone?key=EUU8LOIMTSKG&format=json"
+    )
+    .then((response) => {
+      let zoneName=[];
+      response.data.zones.forEach((elem) => {
+          zoneName.push(elem.zoneName) 
+      });
+      
+      console.log(zoneName[0]);
+      axios.get('http://api.timezonedb.com/v2.1/get-time-zone?key=EUU8LOIMTSKG&format=json&by=zone&zone='+ zoneName[0])
+        .then((resp)=>{
+          console.log(resp.data);
+          res.render("auth/personalAccount", {
+            user: req.user,
+            data: response.data,
+            zone: resp.data
+          });
+        })
+      // res.render("auth/personalAccount", {
+      //   user: req.user,
+      //   data: response.data
+      // });
+    }); 
 });
+
+
 module.exports = router;
+
+
