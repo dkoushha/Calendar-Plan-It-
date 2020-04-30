@@ -11,7 +11,9 @@ const bcryptSalt = 10;
 // Add passport
 const passport = require("passport");
 // add express-validation
-const { validationResult } = require("express-validator");
+const {
+  validationResult
+} = require("express-validator");
 // add middleware
 const signUpValidation = require("../helpers/middlewares").signUpValidation;
 // nodemailer
@@ -36,6 +38,7 @@ router.post("/signup", signUpValidation, (req, res) => {
   let user = new User({
     email: req.body.email,
     password: hashPass,
+    image: `https://api.adorable.io/avatars/59/${req.body.email}`
   });
   user.save();
   // .then((theSignedUpUser) => {
@@ -45,9 +48,7 @@ router.post("/signup", signUpValidation, (req, res) => {
     _userId: user._id,
     token: randomToken(16),
   });
-  console.log(token);
   token.save();
-
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -56,11 +57,10 @@ router.post("/signup", signUpValidation, (req, res) => {
     },
   });
   const mailOptions = {
-    from: "topalian.noubar@gmail.com",
+    from: "ourmeetingapp@gmail.com",
     to: user.email,
     subject: "Account Verification Token",
-    text:
-      "Hello,\n\n" +
+    text: "Hello,\n\n" +
       "Please verify your account by clicking the link: \nhttp://" +
       req.headers.host +
       "/confirmations/" +
@@ -80,26 +80,33 @@ router.post("/signup", signUpValidation, (req, res) => {
 //
 router.get("/confirmations/:token", (req, res) => {
   Token.findOne({
-    token: req.params.token,
-  }).then((token) => {
-    User.findOne({
-      _id: token._userId,
-    }).then((user) => {
+      token: req.params.token,
+    })
+    .then((token) => {
+      console.log("outPut: token", token._userId)
+      return User.findOne({
+        _id: token._userId,
+      });
+    })
+    .then((user) => {
+      console.log('user', user.image);
       user.isVerified = true;
-      console.log(user.isVerified);
-      user.save();
+      return user.save();
+    })
+    .then((user) => {
       req.login(user, () =>
         res.render("auth/personalAccount", {
           user: user,
         })
       );
     });
-  });
 });
 
 //Login
 router.get("/login", (req, res) => {
-  res.render("auth/login", { errorArr: req.flash("error") });
+  res.render("auth/login", {
+    errorArr: req.flash("error")
+  });
 });
 
 router.post(
@@ -118,7 +125,8 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/private-page", (req, res) => {
-  //console.log(req.user);
+
+  
   //API Key:EUU8LOIMTSKG
   axios
     .get(
@@ -149,3 +157,5 @@ router.get("/private-page", (req, res) => {
 
 
 module.exports = router;
+
+

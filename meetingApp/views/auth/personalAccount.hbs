@@ -1,5 +1,7 @@
 <h1>Welcome to your personal page</h1>
 <p>Welcome to {{user.email}}</p>
+
+
 {{!-- <p>Countries Zones:</p>  --}}
 {{!-- {{#each data.zones}}
 <p>{{this.zoneName}} </p>
@@ -17,5 +19,10 @@
 <script>
   let d = new Date()
 document.getElementById('time').innerText = d
+
+
+<img src={{user.image}} alt="" id="profileImg">
+
+
 
 </script>

@@ -19,8 +19,15 @@ const debug = require("debug")(
   `${app_name}:${path.basename(__filename).split(".")[0]}`
 );
 const flash = require("connect-flash");
+
 const app = express();
 app.use(flash());
+
+const avatarsMiddleware = require('adorable-avatars');
+
+
+app.use('/myAvatars', avatarsMiddleware);
+
 //mongoose
 mongoose
   .connect("mongodb://localhost/meetingapp", {
@@ -91,14 +98,13 @@ passport.deserializeUser((id, callback) => {
 });
 // passport localStrategy
 passport.use(
-  new LocalStrategy(
-    {
+  new LocalStrategy({
       usernameField: "email",
     },
     (email, password, callback) => {
       User.findOne({
-        email,
-      })
+          email,
+        })
         .then((user) => {
           if (!user) {
             return callback(null, false, {
