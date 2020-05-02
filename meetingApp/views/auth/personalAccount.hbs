@@ -6,22 +6,24 @@
 {{!-- {{#each data.zones}}
 <p>{{this.zoneName}} </p>
 {{/each}} --}}
-  <label for="">Countries Zones:</label>
- <select name="country">
+<label for="">Countries Zones:</label>
+<select name="country">
     {{#each data.zones}}
     <option value="{{this.zoneName}}">{{this.zoneName}}</option>
     {{/each}}
-  </select>
-  <br>
+
+</select>
+<img src={{user.image}} alt="" id="profileImg">
+
+<br>
 <p>Date and hour: {{zone.formatted}}</p>
 <a href="/logout">Log out</a>
 <h3 id="time">time now</h3>
 <script>
-  let d = new Date()
-document.getElementById('time').innerText = d
+    let d = new Date()
+    document.getElementById('time').innerText = d
 
 
-<img src={{user.image}} alt="" id="profileImg">
 
 
 

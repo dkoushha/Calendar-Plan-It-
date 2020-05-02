@@ -23,8 +23,6 @@ const flash = require("connect-flash");
 const app = express();
 app.use(flash());
 
-
-
 //mongoose
 mongoose
   .connect("mongodb://localhost/meetingapp", {
@@ -53,13 +51,13 @@ app.use(
 app.use(cookieParser());
 
 // Express View engine setup
-app.use(
-  require("node-sass-middleware")({
-    src: path.join(__dirname, "public"),
-    dest: path.join(__dirname, "public"),
-    sourceMap: true,
-  })
-);
+// app.use(
+//   require("node-sass-middleware")({
+//     src: path.join(__dirname, "public"),
+//     dest: path.join(__dirname, "public"),
+//     sourceMap: true,
+//   })
+// );
 
 // express-session configuration
 app.use(
@@ -95,13 +93,14 @@ passport.deserializeUser((id, callback) => {
 });
 // passport localStrategy
 passport.use(
-  new LocalStrategy({
+  new LocalStrategy(
+    {
       usernameField: "email",
     },
     (email, password, callback) => {
       User.findOne({
-          email,
-        })
+        email,
+      })
         .then((user) => {
           if (!user) {
             return callback(null, false, {
