@@ -124,36 +124,24 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/personalAccount", (req, res) => {
-  //API Key:EUU8LOIMTSKG
-  axios
-    .get(
-      "http://api.timezonedb.com/v2.1/list-time-zone?key=EUU8LOIMTSKG&format=json"
-    )
-    .then((response) => {
-      let zoneName = [];
-      response.data.zones.forEach((elem) => {
-        zoneName.push(elem.zoneName);
-      });
+  axios.get('http://ip-api.com/json').then((response)=>{  
+    console.log(response);
+    console.log('Latitude: ',response.data.lat);
+    console.log('Longitude', response.data.lon);
+    let userLat=response.data.lat
+    let userLon=response.data.lon
 
-      console.log(zoneName[0]);
-      axios
-        .get(
-          "http://api.timezonedb.com/v2.1/get-time-zone?key=EUU8LOIMTSKG&format=json&by=zone&zone=" +
-            zoneName[0]
-        )
-        .then((resp) => {
-          console.log(resp.data);
-          res.render("auth/personalAccount", {
-            user: req.user,
-            data: response.data,
-            zone: resp.data,
-          });
-        });
-      // res.render("auth/personalAccount", {
-      //   user: req.user,
-      //   data: response.data
-      // });
-    });
+    //API Key:EUU8LOIMTSKG
+    axios.get('http://api.timezonedb.com/v2.1/get-time-zone?key=EUU8LOIMTSKG&format=json&by=position&lat='+userLat+'&lng='+userLon)
+    .then((response)=>{
+      console.log(response.data);
+      res.render("auth/personalAccount",{
+        user: req.user,
+        zone: response.data
+      })
+    })
+
+  })
 });
 
 module.exports = router;
