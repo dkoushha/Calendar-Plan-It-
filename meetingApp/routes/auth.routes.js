@@ -11,9 +11,7 @@ const bcryptSalt = 10;
 // Add passport
 const passport = require("passport");
 // add express-validation
-const {
-  validationResult
-} = require("express-validator");
+const { validationResult } = require("express-validator");
 // add middleware
 const signUpValidation = require("../helpers/middlewares").signUpValidation;
 // nodemailer
@@ -23,13 +21,13 @@ const axios = require("axios");
 const URL = "http://localhost:3000/";
 
 router.get("/signup", (req, res) => {
-  res.render("auth/signup");
+  res.render("auth/signupForm");
 });
 
 router.post("/signup", signUpValidation, (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.render("auth/signup", {
+    return res.render("auth/signupForm", {
       errors: errors.array(),
     });
   }
@@ -38,7 +36,7 @@ router.post("/signup", signUpValidation, (req, res) => {
   let user = new User({
     email: req.body.email,
     password: hashPass,
-    image: `https://api.adorable.io/avatars/59/${req.body.email}`
+    image: `https://api.adorable.io/avatars/59/${req.body.email}`,
   });
   user.save();
   // .then((theSignedUpUser) => {
@@ -60,7 +58,8 @@ router.post("/signup", signUpValidation, (req, res) => {
     from: "ourmeetingapp@gmail.com",
     to: user.email,
     subject: "Account Verification Token",
-    text: "Hello,\n\n" +
+    text:
+      "Hello,\n\n" +
       "Please verify your account by clicking the link: \nhttp://" +
       req.headers.host +
       "/confirmations/" +
@@ -80,16 +79,16 @@ router.post("/signup", signUpValidation, (req, res) => {
 //
 router.get("/confirmations/:token", (req, res) => {
   Token.findOne({
-      token: req.params.token,
-    })
+    token: req.params.token,
+  })
     .then((token) => {
-      console.log("outPut: token", token._userId)
+      console.log("outPut: token", token._userId);
       return User.findOne({
         _id: token._userId,
       });
     })
     .then((user) => {
-      console.log('user', user.image);
+      console.log("user", user.image);
       user.isVerified = true;
       return user.save();
     })
@@ -104,15 +103,15 @@ router.get("/confirmations/:token", (req, res) => {
 
 //Login
 router.get("/login", (req, res) => {
-  res.render("auth/login", {
-    errorArr: req.flash("error")
+  res.render("auth/signupForm", {
+    errorArr: req.flash("error"),
   });
 });
 
 router.post(
   "/login",
   passport.authenticate("local", {
-    successRedirect: "/private-page",
+    successRedirect: "/personalAccount",
     failureRedirect: "/login",
     failureFlash: true,
     passReqToCallback: true,
@@ -124,38 +123,37 @@ router.get("/logout", (req, res) => {
   res.render("auth/logout");
 });
 
-router.get("/private-page", (req, res) => {
-
-  
+router.get("/personalAccount", (req, res) => {
   //API Key:EUU8LOIMTSKG
   axios
     .get(
       "http://api.timezonedb.com/v2.1/list-time-zone?key=EUU8LOIMTSKG&format=json"
     )
     .then((response) => {
-      let zoneName=[];
+      let zoneName = [];
       response.data.zones.forEach((elem) => {
-          zoneName.push(elem.zoneName) 
+        zoneName.push(elem.zoneName);
       });
-      
+
       console.log(zoneName[0]);
-      axios.get('http://api.timezonedb.com/v2.1/get-time-zone?key=EUU8LOIMTSKG&format=json&by=zone&zone='+ zoneName[0])
-        .then((resp)=>{
+      axios
+        .get(
+          "http://api.timezonedb.com/v2.1/get-time-zone?key=EUU8LOIMTSKG&format=json&by=zone&zone=" +
+            zoneName[0]
+        )
+        .then((resp) => {
           console.log(resp.data);
           res.render("auth/personalAccount", {
             user: req.user,
             data: response.data,
-            zone: resp.data
+            zone: resp.data,
           });
-        })
+        });
       // res.render("auth/personalAccount", {
       //   user: req.user,
       //   data: response.data
       // });
-    }); 
+    });
 });
 
-
 module.exports = router;
-
-
