@@ -20,26 +20,21 @@
   <img src={{user.image}} alt="" id="profileImg">
 
   <p>Welcome to {{user.email}}</p>
+  <p>Country Name: {{zone.countryName}}</p>
+  <p>Zone Name: {{zone.zoneName}}</p>
 
 
-  {{!-- <p>Countries Zones:</p>  --}}
-  {{!-- {{#each data.zones}}
-<p>{{this.zoneName}} </p>
-{{/each}} --}}
+  <p id="date"></p>
+  <div id="txt"></div>
+  
+  <br>
 
-  <label for="">Countries Zones:</label>
-  <select name="country">
-    {{#each data.zones}}
-    <option value="{{this.zoneName}}">{{this.zoneName}}</option>
-    {{/each}}
-</select>
-<br>
-<p>Date and hour: {{zone.formatted}}</p>
-<a href="/logout">Log out</a>
-<h3 id="time">time now</h3>
+  <a href="/logout">Log out</a>
+  
+
 </div>
 
-<body onload="init();">
+<body onload="start();">
   <div id="scheduler_here" class="dhx_cal_container" style="width: 100%; height: 100%;">
     <div class="dhx_cal_navline" style="background:  #00adb5;">
       <div class="dhx_cal_prev_button">&nbsp;</div>
@@ -53,11 +48,9 @@
     <div class="dhx_cal_header"></div>
     <div class="dhx_cal_data"></div>
   </div>
+  
   <script>
-    let d = new Date()
-    document.getElementById('time').innerText = d;
-  </script>
-  <script>
+
     function init() {
       scheduler.config.xml_date = "%Y-%m-%d %H:%i";
       scheduler.init("scheduler_here", new Date(), "month");
@@ -74,5 +67,32 @@
       dp.setTransactionMode("POST", false);
       scheduler.parse("/data", "json");
     }
+    function startTime() {
+    let today = new Date();
+    let h = today.getHours();
+    let m = today.getMinutes();
+    let s = today.getSeconds();
+    h = checkTime(h);
+    m = checkTime(m);
+    s = checkTime(s);
+    document.getElementById('txt').innerHTML =
+      h + ":" + m + ":" + s;
+    let t = setTimeout(startTime, 500);
+  }
+  function checkTime(i) {
+    if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+    return i;
+  }
+  function start(){
+    init()
+    startTime()
+  }
+  n = new Date();
+  y = n.getFullYear();
+  m = n.getMonth() + 1;
+  d = n.getDate();
+  m = checkTime(m)
+  d = checkTime(d)
+  document.getElementById("date").innerHTML = d + "." + m + "." + y;
   </script>
   <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js"></script>
