@@ -93,14 +93,13 @@ passport.deserializeUser((id, callback) => {
 });
 // passport localStrategy
 passport.use(
-  new LocalStrategy(
-    {
+  new LocalStrategy({
       usernameField: "email",
     },
     (email, password, callback) => {
       User.findOne({
-        email,
-      })
+          email,
+        })
         .then((user) => {
           if (!user) {
             return callback(null, false, {
@@ -142,5 +141,5 @@ app.use("/", auth);
 
 const personalAccount = require("./routes/personalAccount.routes");
 app.use("/", personalAccount);
-module.exports = app;
 
+module.exports = app;
