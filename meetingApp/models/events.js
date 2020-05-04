@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 const eventSchema = new Schema({
     _userId: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
         ref: 'User'
     },
     text: {

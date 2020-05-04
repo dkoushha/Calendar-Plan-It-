@@ -8,10 +8,8 @@
     "dev-windows": "nodemon ./bin/www"
   },
   "dependencies": {
-
-    "axios": "^0.19.2",
-
     "adorable-avatars": "^0.4.1",
+    "axios": "^0.19.2",
     "bcrypt": "^4.0.1",
     "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
