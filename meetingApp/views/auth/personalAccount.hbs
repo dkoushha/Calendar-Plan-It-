@@ -32,13 +32,11 @@
     {{#each data.zones}}
     <option value="{{this.zoneName}}">{{this.zoneName}}</option>
     {{/each}}
-
-  </select>
-
-  <br>
-  <p>Date and hour: {{zone.formatted}}</p>
-  <a href="/logout">Log out</a>
-  <h3 id="time">time now</h3>
+</select>
+<br>
+<p>Date and hour: {{zone.formatted}}</p>
+<a href="/logout">Log out</a>
+<h3 id="time">time now</h3>
 </div>
 
 <body onload="init();">
@@ -57,7 +55,7 @@
   </div>
   <script>
     let d = new Date()
-    document.getElementById('time').innerText = d
+    document.getElementById('time').innerText = d;
   </script>
   <script>
     function init() {
