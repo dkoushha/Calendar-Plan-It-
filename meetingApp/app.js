@@ -140,5 +140,6 @@ app.use("/", index);
 
 const auth = require("./routes/auth.routes");
 app.use("/", auth);
-
+const personalAccount = require("./routes/personalAccount.routes");
+app.use("/", personalAccount);
 module.exports = app;
