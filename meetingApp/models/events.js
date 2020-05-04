@@ -2,27 +2,23 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const eventSchema = new Schema({
-    _userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'User'
-    },
-    text: {
-        type: String
+  _userId: {
+    type: mongoose.Schema.Types.ObjectId,
 
-    },
-    start_date: {
-        type: Date
-
-    },
-    end_date: {
-        type: Date
-
-    },
-    id: {
-        type: String
-    }
-
+    ref: "User",
+  },
+  text: {
+    type: String,
+  },
+  start_date: {
+    type: Date,
+  },
+  end_date: {
+    type: Date,
+  },
+  id: {
+    type: String,
+  },
 });
 
 const Event = mongoose.model("Event", eventSchema);
