@@ -23,6 +23,7 @@
   <p>Country Name: {{zone.countryName}}</p>
   <p>Zone Name: {{zone.zoneName}}</p>
 
+
   <p id="date"></p>
   <div id="txt"></div>
   
@@ -30,6 +31,7 @@
 
   <a href="/logout">Log out</a>
   
+
 </div>
 
 <body onload="start();">
@@ -46,7 +48,9 @@
     <div class="dhx_cal_header"></div>
     <div class="dhx_cal_data"></div>
   </div>
+  
   <script>
+
     function init() {
       scheduler.config.xml_date = "%Y-%m-%d %H:%i";
       scheduler.init("scheduler_here", new Date(), "month");
