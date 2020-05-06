@@ -12,13 +12,15 @@ const session = require("express-session");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const User = require("./models/user.model");
+const User = require("./models/User.model");
 const MongoStore = require("connect-mongo")(session);
 const app_name = require("./package.json").name;
 const debug = require("debug")(
   `${app_name}:${path.basename(__filename).split(".")[0]}`
 );
 const flash = require("connect-flash");
+const momentTimezone = require("moment-timezone");
+const moment = require("moment");
 
 const app = express();
 app.use(flash());
@@ -93,13 +95,14 @@ passport.deserializeUser((id, callback) => {
 });
 // passport localStrategy
 passport.use(
-  new LocalStrategy({
+  new LocalStrategy(
+    {
       usernameField: "email",
     },
     (email, password, callback) => {
       User.findOne({
-          email,
-        })
+        email,
+      })
         .then((user) => {
           if (!user) {
             return callback(null, false, {
