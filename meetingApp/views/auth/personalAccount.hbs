@@ -6,8 +6,13 @@
     height: 100%;
   }
 
-  .container {
+  .container-content {
     margin: 20px 20px;
+  }
+
+  .dhx_cal_navline {
+    background: linear-gradient(to left, #434E5F, #00adb5);
+
   }
 </style>
 
@@ -15,7 +20,7 @@
 
 <link rel="stylesheet" href="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.css" />
 
-<div class="container">
+<div class="container-content">
   <h1>Welcome to your personal page</h1>
   <img src={{user.image}} alt="" id="profileImg">
 
@@ -23,20 +28,15 @@
   <p>Country Name: {{zone.countryName}}</p>
   <p>Zone Name: {{zone.zoneName}}</p>
 
-
   <p id="date"></p>
   <div id="txt"></div>
-
   <br>
-
   <a href="/logout">Log out</a>
-
-
 </div>
 
 <body onload="start();">
   <div id="scheduler_here" class="dhx_cal_container" style="width: 80%; height: 60%; margin: 0 auto;">
-    <div class="dhx_cal_navline" style="background:  #00adb5;">
+    <div class="dhx_cal_navline">
       <div class="dhx_cal_prev_button">&nbsp;</div>
       <div class="dhx_cal_next_button">&nbsp;</div>
       <div class="dhx_cal_today_button"></div>
@@ -52,7 +52,7 @@
   <script>
 
     function init() {
-      scheduler.config.xml_date = "%Y-%m-%d %H:%i";
+      scheduler.config.xml_date = "%Y-%m-%d %H:%i %P";
       scheduler.init("scheduler_here", new Date(), "month");
       // enables the dynamic loading
       scheduler.setLoadMode("day");
@@ -67,6 +67,8 @@
       dp.setTransactionMode("POST", false);
       scheduler.parse("/data", "json");
     }
+
+
     function startTime() {
       let today = new Date();
       let h = today.getHours();

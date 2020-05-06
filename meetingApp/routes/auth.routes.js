@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 // Require user model
-const User = require("../models/user.model");
+const User = require("../models/User.model");
 // Require token model
-const Token = require("../models/token");
+const Token = require("../models/Token");
 const randomToken = require("random-token");
 // Add bcrypt to encrypt passwords
 const bcrypt = require("bcrypt");
@@ -11,26 +11,42 @@ const bcryptSalt = 10;
 // Add passport
 const passport = require("passport");
 // add express-validation
-const { validationResult } = require("express-validator");
+const {
+  validationResult
+} = require("express-validator");
 // add middleware
 const signUpValidation = require("../helpers/middlewares").signUpValidation;
 // nodemailer
 const nodemailer = require("nodemailer");
-//axios
-const axios = require("axios");
-const URL = "http://localhost:3000/";
+const axios = require('axios')
 
-router.get("/signup", (req, res) => {
+
+
+
+// email authorization
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_USERNAME,
+    pass: process.env.GMAIL_PASSWORD,
+  },
+});
+
+//render home page
+router.get("/", (req, res) => {
   res.render("auth/signupForm");
 });
 
+// signup, signUpValidation in the helpers folder
 router.post("/signup", signUpValidation, (req, res) => {
+  // get the validation errors 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.render("auth/signupForm", {
       errors: errors.array(),
     });
   }
+  // save new user 
   const salt = bcrypt.genSaltSync(bcryptSalt);
   const hashPass = bcrypt.hashSync(req.body.password, salt);
   let user = new User({
@@ -39,56 +55,52 @@ router.post("/signup", signUpValidation, (req, res) => {
     image: `https://api.adorable.io/avatars/59/${req.body.email}`,
   });
   user.save();
-  // .then((theSignedUpUser) => {
-  //     req.login(theSignedUpUser, () => res.send("you are logged in"));
-  // });
+  // create new token for the user to verify its email 
   const token = new Token({
     _userId: user._id,
     token: randomToken(16),
   });
   token.save();
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.GMAIL_USERNAME,
-      pass: process.env.GMAIL_PASSWORD,
-    },
-  });
+  // send a verification email
   const mailOptions = {
     from: "ourmeetingapp@gmail.com",
     to: user.email,
     subject: "Account Verification Token",
-    text:
-      "Hello,\n\n" +
+    text: "Hello,\n\n" +
       "Please verify your account by clicking the link: \nhttp://" +
       req.headers.host +
       "/confirmations/" +
       token.token +
-      ".\n",
+      ".\n"
+    // check why it's not working
+    // html: `<a href= "http://${req.headers.host }/confirmations/ ${token.token }">verify your email</a>`
   };
+  // render the res after signup
   transporter.sendMail(mailOptions, function (err) {
     if (err) {
       return res.send({
         msg: err.message,
       });
     }
-    res.send("A verification email has been sent to " + user.email + ".");
+    let userEmail = req.body.email
+    res.render("auth/emailConfirmation", {
+      userEmail: userEmail
+    });
   });
 });
 
-//
+//render personalAccount after email verification
 router.get("/confirmations/:token", (req, res) => {
   Token.findOne({
-    token: req.params.token,
-  })
+      token: req.params.token,
+    })
     .then((token) => {
-      console.log("outPut: token", token._userId);
+      console.log("outPut: token", token);
       return User.findOne({
         _id: token._userId,
       });
     })
     .then((user) => {
-      console.log("user", user.image);
       user.isVerified = true;
       return user.save();
     })
@@ -101,13 +113,13 @@ router.get("/confirmations/:token", (req, res) => {
     });
 });
 
+
 //Login
 router.get("/login", (req, res) => {
   res.render("auth/signupForm", {
-    errorArr: req.flash("error"),
+    errorArr: req.flash("error")
   });
 });
-
 router.post(
   "/login",
   passport.authenticate("local", {
@@ -117,31 +129,43 @@ router.post(
     passReqToCallback: true,
   })
 );
+
 //Logout
 router.get("/logout", (req, res) => {
   req.logOut();
-  res.render("auth/logout");
+  let message = "Thank you for using our app"
+  res.render("auth/signupForm", {
+    message: message
+  });
 });
-
 router.get("/personalAccount", (req, res) => {
-  axios.get('http://ip-api.com/json').then((response)=>{  
-    console.log(response);
-    console.log('Latitude: ',response.data.lat);
-    console.log('Longitude', response.data.lon);
-    let userLat=response.data.lat
-    let userLon=response.data.lon
+  axios.get("http://ip-api.com/json").then((response) => {
+    // console.log(response);
+    console.log("Latitude: ", response.data.lat);
+    console.log("Longitude", response.data.lon);
+    let userLat = response.data.lat;
+    let userLon = response.data.lon;
 
     //API Key:EUU8LOIMTSKG
-    axios.get('http://api.timezonedb.com/v2.1/get-time-zone?key=EUU8LOIMTSKG&format=json&by=position&lat='+userLat+'&lng='+userLon)
-    .then((response)=>{
-      console.log(response.data);
-      res.render("auth/personalAccount",{
-        user: req.user,
-        zone: response.data
-      })
-    })
+    axios
+      .get(
+        "http://api.timezonedb.com/v2.1/get-time-zone?key=EUU8LOIMTSKG&format=json&by=position&lat=" +
+        userLat +
+        "&lng=" +
+        userLon
+      )
+      .then((response) => {
+        // console.log(response.data);
 
-  })
+        res.render("auth/personalAccount", {
+          user: req.user,
+          zone: response.data,
+        });
+      });
+  });
 });
+
+
+
 
 module.exports = router;

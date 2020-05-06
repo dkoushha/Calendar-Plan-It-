@@ -2,15 +2,21 @@
 
 
 
-{{#each errors}}
+{{!-- {{#each errorArr}}
 <p style="color: red;">{{this.msg}}</p>
-{{/each}}
+{{/each}} --}}
+
 
 <div class="body-container">
+	<h2>{{message}}</h2>
+
 	<div class="container-signupForm" id="container">
 		<div class="form-container sign-up-container">
 			<form action="/signup" method="post">
 				<h1>Create Account</h1>
+				{{#each errors}}
+				<p style="color: red;">{{this.msg}}</p>
+				{{/each}}
 				<!-- <put type="text" placeholder="Name" /> -->
 				<input type="email" name="email" placeholder="Email" />
 				<input type="password" name="password" placeholder="Password" />
@@ -20,6 +26,9 @@
 		<div class="form-container sign-in-container">
 			<form action="/login" method="POST">
 				<h1>Sign in</h1>
+				{{#each errorArr}}
+				<p style="color: red;">{{this}}</p>
+				{{/each}}
 				<input type="email" name="email" placeholder="Email" />
 				<input type="password" name="password" placeholder="Password" />
 				{{!-- <a href="#">Forgot your password?</a> --}}

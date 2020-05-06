@@ -1,15 +1,11 @@
 const {
     check,
 } = require('express-validator');
-const User = require("../models/user.model");
+const User = require("../models/User.model");
 
 
 
-let signUpValidation = [check('password')
-    .isLength({
-        min: 5
-    }).withMessage('Password must be at least 5 chars long')
-    .matches(/\d/).withMessage('must contain a number'),
+let signUpValidation = [
     check('email').isEmail().withMessage('Email is not valid')
     .custom(email => {
         return User.findOne({
@@ -19,7 +15,10 @@ let signUpValidation = [check('password')
                 throw new Error('E-mail already in use');
             }
         })
-    })
+    }), check('password')
+    .isLength({
+        min: 5
+    }).withMessage('Password must be at least 5 chars long')
 ];
 
 module.exports = {
