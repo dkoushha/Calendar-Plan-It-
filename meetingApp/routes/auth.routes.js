@@ -21,8 +21,6 @@ const nodemailer = require("nodemailer");
 const axios = require('axios')
 
 
-
-
 // email authorization
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -136,32 +134,6 @@ router.get("/logout", (req, res) => {
   let message = "Thank you for using our app"
   res.render("auth/signupForm", {
     message: message
-  });
-});
-router.get("/personalAccount", (req, res) => {
-  axios.get("http://ip-api.com/json").then((response) => {
-    // console.log(response);
-    console.log("Latitude: ", response.data.lat);
-    console.log("Longitude", response.data.lon);
-    let userLat = response.data.lat;
-    let userLon = response.data.lon;
-
-    //API Key:EUU8LOIMTSKG
-    axios
-      .get(
-        "http://api.timezonedb.com/v2.1/get-time-zone?key=EUU8LOIMTSKG&format=json&by=position&lat=" +
-        userLat +
-        "&lng=" +
-        userLon
-      )
-      .then((response) => {
-        // console.log(response.data);
-
-        res.render("auth/personalAccount", {
-          user: req.user,
-          zone: response.data,
-        });
-      });
   });
 });
 
