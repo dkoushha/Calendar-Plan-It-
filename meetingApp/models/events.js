@@ -3,9 +3,13 @@ const Schema = mongoose.Schema;
 // const timeZone = require("mongoose-timezone");
 
 const eventSchema = new Schema({
-  _userId: [{
+  _userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "User"
+  },
+  attendList:[{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User", 
   }],
   text: {
     type: String,
