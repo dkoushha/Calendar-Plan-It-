@@ -56,6 +56,7 @@ router.post("/signup", signUpValidation, (req, res) => {
   // create new token for the user to verify its email 
   const token = new Token({
     _userId: user._id,
+    _eventId:user._id,
     token: randomToken(16),
   });
   token.save();

@@ -129,10 +129,9 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-let dataToClientSide = [];
 router.get("/invite", (req, res) => {
   console.log(req.user);
-
+  let dataToClientSide = [];
   Event.find().then((dataToSend) => {
     //console.log('Data',dataToSend);
     dataToSend.forEach((e) => {
@@ -144,57 +143,87 @@ router.get("/invite", (req, res) => {
     console.log("Data to clint side", dataToClientSide);
   });
 
-  res.render("auth/invitation");
+  res.render("auth/invitation", { events: dataToClientSide });
   //res.render('auth/invite')
 });
 
 router.post("/invite", (req, res) => {
-  console.log(req.body.email);
-  console.log(req.user.email);
-  let eventID;
-  dataToClientSide.forEach((e) => {
-    console.log("Event ID:", e._id);
-    eventID = e._id;
-    console.log(eventID);
-  });
-  const token = new Token({
-    _EventId: eventID,
-    token: randomToken(16),
-  });
-  token.save();
-  console.log('token',token);
-  const mailOptions = {
-    from: "ourmeetingapp@gmail.com",
-    to: req.body.email,
-    subject: "Invitation Token",
-    text:
-      "Hello,\n\n" +
-      `Please verify your invitation made by ${req.user.email} and clicking the link: \nhttp://` +
-      req.headers.host +
-      "/confirmations/" +
-      token.token +
-      ".\n",
-  };
-
-  transporter.sendMail(mailOptions, function (err) {
-    if (err) {
-      return res.send({
-        msg: err.message,
+  User.findOne({ email: req.body.email })
+    .then((user) => {
+      console.log("Invited user ID", user._id);
+      return user;
+    })
+    .then((user) => {
+      const token = new Token({
+        _eventId: req.body.event,
+        _userId: req.user.id,
+        invitedUserId: user._id,
+        token: randomToken(16),
       });
-    }
-    let userEmail = req.user.email;
-    let inviteEmail = req.body.email;
-    res.render("auth/invitationConfirmation", {
-      userEmail: userEmail,
-      inviteEmail: inviteEmail,
+      token.save();
+      console.log("token wiht invited user ID", token);
+      const mailOptions = {
+        from: "ourmeetingapp@gmail.com",
+        to: req.body.email,
+        subject: "Invitation Token",
+        text:
+          "Hello,\n\n" +
+          `Please verify your invitation made by ${req.user.email} and clicking the link: \nhttp://` +
+          req.headers.host +
+          "/invitationConfirmation/" +
+          token.token +
+          ".\n",
+      };
+
+      transporter.sendMail(mailOptions, function (err) {
+        if (err) {
+          return res.send({
+            msg: err.message,
+          });
+        }
+        let userEmail = req.user.email;
+        let inviteEmail = req.body.email;
+        res.render("auth/invitationConfirmation", {
+          userEmail: userEmail,
+          inviteEmail: inviteEmail,
+        });
+      });
     });
-  });
 });
 
 router.get("/invitationConfirmation/:token", (req, res) => {
-  Token.find({ token: req.params.token }).then((token)=>{
-      console.log(token)
-  })
-});
+  console.log(req.params.token);
+  Token.findOne({ token: req.params.token })
+    .then((token) => {
+      console.log("This is the token", token);
+      let inviteInfoAndEventInfo = [];
+      // token.forEach((e) => {
+      console.log("Invited User:", token.invitedUserId);
+      inviteInfoAndEventInfo.push(token.invitedUserId);
+      inviteInfoAndEventInfo.push(token._eventId);
+      // });
+      console.log("Invited user and Event", inviteInfoAndEventInfo);
 
+      return Event.findOneAndUpdate({ _id: token._eventId }, { $addToSet: { attendList: token.invitedUserId }},{new:true})
+    }).then(() => {
+        console.log('User pushed to attendlist');
+        res.send("Token confirmation");
+    })
+    
+  // let promise2 = Event.findOne({ _id: eventId });
+  // // .then(() => {
+  // //   //event.attendList.push(user._id);
+  // //   //console.log('Attendind list of event',event.attendList);
+  // // });
+  // Promise.all([promise1, promise2]).then((userAndEvent) => {
+  //   console.log("Invited User", userAndEvent);
+  //   userAndEvent.forEach((e) => {
+  //     if (e.attendList) {
+  //       console.log("Attending List:", e.attendList);
+  //     }
+  //   });
+  // });
+
+  
+});
 module.exports = router;
