@@ -106,7 +106,7 @@ passport.use(
         .then((user) => {
           if (!user) {
             return callback(null, false, {
-              message: "Incorrect username",
+              message: "Incorrect email",
             });
           }
           if (!bcrypt.compareSync(password, user.password)) {
