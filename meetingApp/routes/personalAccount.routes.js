@@ -49,6 +49,7 @@ router.post("/data", (req, res) => {
       tid = data.id;
       console.log("outPut: functionupdate_response -> tid", tid);
     }
+    // send the data back to the calendar
     res.setHeader("Content-Type", "application/json");
     res.send({
       action: mode,
@@ -58,24 +59,20 @@ router.post("/data", (req, res) => {
   }
   // edit an event
   if (mode == "updated") {
-    Event.findOneAndUpdate(
-      {
+    Event.findOneAndUpdate({
         id: req.body.id,
-      },
-      {
+      }, {
         text: req.body.text,
         start_date: req.body.start_date,
         end_date: req.body.end_date,
-      },
-      {
+      }, {
         new: true,
       },
       update_response
     );
     // delete an event
   } else if (mode == "deleted") {
-    Event.findOneAndDelete(
-      {
+    Event.findOneAndDelete({
         id: req.body.id,
       },
       update_response
@@ -107,9 +104,9 @@ router.get("/personalAccount", (req, res) => {
     axios
       .get(
         "http://api.timezonedb.com/v2.1/get-time-zone?key=EUU8LOIMTSKG&format=json&by=position&lat=" +
-          userLat +
-          "&lng=" +
-          userLon
+        userLat +
+        "&lng=" +
+        userLon
       )
       .then((response) => {
         // console.log(response.data);
@@ -121,6 +118,8 @@ router.get("/personalAccount", (req, res) => {
   });
 });
 
+
+// set up nodemailer to send invitation email to an event
 let transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -162,13 +161,12 @@ router.post("/invite", (req, res) => {
     token: randomToken(16),
   });
   token.save();
-  console.log('token',token);
+  console.log('token', token);
   const mailOptions = {
     from: "ourmeetingapp@gmail.com",
     to: req.body.email,
     subject: "Invitation Token",
-    text:
-      "Hello,\n\n" +
+    text: "Hello,\n\n" +
       `Please verify your invitation made by ${req.user.email} and clicking the link: \nhttp://` +
       req.headers.host +
       "/confirmations/" +
@@ -192,8 +190,10 @@ router.post("/invite", (req, res) => {
 });
 
 router.get("/invitationConfirmation/:token", (req, res) => {
-  Token.find({ token: req.params.token }).then((token)=>{
-      console.log(token)
+  Token.find({
+    token: req.params.token
+  }).then((token) => {
+    console.log(token)
   })
 });
 
