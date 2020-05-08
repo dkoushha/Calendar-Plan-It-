@@ -11,6 +11,30 @@ const axios = require("axios");
 const nodemailer = require("nodemailer");
 const Token = require("../models/Token");
 const randomToken = require("random-token");
+// for uploading images
+const cloudinary = require("cloudinary");
+const cloudinaryStorage = require("multer-storage-cloudinary");
+// package to allow <input type="file"> in forms
+const multer = require("multer");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET,
+});
+
+var storage = cloudinaryStorage({
+  cloudinary: cloudinary,
+  folder: "profile-pictures", // The name of the folder in cloudinary
+  allowedFormats: ["jpg", "png"],
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // The file on cloudinary would have the same name as the original file name
+  },
+});
+
+const uploadCloud = multer({
+  storage: storage,
+});
 
 //fetch the data from database when loading the calender
 router.get("/data", function (req, res) {
@@ -35,7 +59,7 @@ router.get("/data", function (req, res) {
   });
 });
 
-// add delete edit the events to database
+// add delete edit the events in the database
 router.post("/data", (req, res) => {
   let data = req.body;
   // operation mode (edit, add, delete)
@@ -96,30 +120,61 @@ router.post("/data", (req, res) => {
 //for the user from ip
 router.get("/personalAccount", (req, res) => {
   axios.get("http://ip-api.com/json").then((response) => {
-    console.log("Latitude: ", response.data.lat);
-    console.log("Longitude", response.data.lon);
-    let userLat = response.data.lat;
-    let userLon = response.data.lon;
-    //API Key:EUU8LOIMTSKG
-    axios
-      .get(
-        "http://api.timezonedb.com/v2.1/get-time-zone?key=EUU8LOIMTSKG&format=json&by=position&lat=" +
-        userLat +
-        "&lng=" +
-        userLon
-      )
-      .then((response) => {
-        // console.log(response.data);
-        res.render("auth/personalAccount", {
-          user: req.user,
-          zone: response.data,
-        });
+      console.log("Latitude: ", response.data.lat);
+      console.log("Longitude", response.data.lon);
+      let userLat = response.data.lat;
+      let userLon = response.data.lon;
+      //API Key:EUU8LOIMTSKG
+      return axios
+        .get(
+          "http://api.timezonedb.com/v2.1/get-time-zone?key=EUU8LOIMTSKG&format=json&by=position&lat=" +
+          userLat +
+          "&lng=" +
+          userLon
+        )
+    })
+    .then((response) => {
+      console.log("req.user", req.user);
+      res.render("auth/personalAccount", {
+        user: req.user,
+        zone: response.data,
       });
+    });
+});
+
+
+// upload profile picture route
+router.post(
+  "/upload-profile-img",
+  uploadCloud.single("user-img"),
+  (req, res) => {
+    // this is what cloudinary sets on req.file ==> namely the file's public URL
+    if (!req.file) {
+      res.redirect("personalAccount")
+
+    } else {
+      console.log("req.file", req.file);
+      const imageURL = req.file.secure_url;
+      User.findById(req.user._id).then((user) => {
+        user.image = imageURL;
+        user.save()
+        res.redirect("personalAccount");
+      });
+    }
+  });
+
+router.post("/delete-profile-img", uploadCloud.single("user-img"), (req, res) => {
+  User.findByIdAndUpdate({
+    _id: req.user._id
+  }, {
+    image: `https://api.adorable.io/avatars/59/${req.user.email}`
+  }).then(() => {
+    res.redirect("personalAccount");
   });
 });
 
 
-// set up nodemailer to send invitation email to an event
+// email authorization
 let transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -128,10 +183,9 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-let dataToClientSide = [];
 router.get("/invite", (req, res) => {
   console.log(req.user);
-
+  let dataToClientSide = [];
   Event.find().then((dataToSend) => {
     //console.log('Data',dataToSend);
     dataToSend.forEach((e) => {
@@ -161,7 +215,7 @@ router.post("/invite", (req, res) => {
     token: randomToken(16),
   });
   token.save();
-  console.log('token', token);
+  console.log("token", token);
   const mailOptions = {
     from: "ourmeetingapp@gmail.com",
     to: req.body.email,
@@ -191,10 +245,10 @@ router.post("/invite", (req, res) => {
 
 router.get("/invitationConfirmation/:token", (req, res) => {
   Token.find({
-    token: req.params.token
+    token: req.params.token,
   }).then((token) => {
-    console.log(token)
-  })
+    console.log(token);
+  });
 });
 
 module.exports = router;

@@ -38,3 +38,14 @@ body {
 .dhx_cal_navline {
   background: linear-gradient(to left, #434E5F, #00adb5);
 }
+
+/* personal account css */
+
+#upload-file-label {
+  border: solid #434E5F;
+  font-size: 16px;
+}
+
+#myFile {
+  display: none;
+}

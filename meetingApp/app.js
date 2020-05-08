@@ -21,9 +21,13 @@ const debug = require("debug")(
 const flash = require("connect-flash");
 const momentTimezone = require("moment-timezone");
 const moment = require("moment");
-
+const nodemailer = require("nodemailer");
+// Require user model
+// const User = require("../models/User.model");
+//require event model
+const Event = require("./models/Events");
+const cron = require("node-cron");
 const app = express();
-app.use(flash());
 
 //mongoose
 mongoose
@@ -50,16 +54,9 @@ app.use(
     extended: false,
   })
 );
-app.use(cookieParser());
+app.use(flash());
 
-// Express View engine setup
-// app.use(
-//   require("node-sass-middleware")({
-//     src: path.join(__dirname, "public"),
-//     dest: path.join(__dirname, "public"),
-//     sourceMap: true,
-//   })
-// );
+app.use(cookieParser());
 
 // express-session configuration
 app.use(
@@ -95,14 +92,13 @@ passport.deserializeUser((id, callback) => {
 });
 // passport localStrategy
 passport.use(
-  new LocalStrategy(
-    {
+  new LocalStrategy({
       usernameField: "email",
     },
     (email, password, callback) => {
       User.findOne({
-        email,
-      })
+          email,
+        })
         .then((user) => {
           if (!user) {
             return callback(null, false, {
@@ -144,5 +140,61 @@ app.use("/", auth);
 
 const personalAccount = require("./routes/personalAccount.routes");
 app.use("/", personalAccount);
+
+
+// email authorization
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: process.env.GMAIL_USERNAME,
+//     pass: process.env.GMAIL_PASSWORD,
+//   },
+// });
+
+// cron.schedule("* * * * *", function () {
+//   Event.find().then((events) => {
+//     let userId;
+//     console.log("event", events);
+//     console.log("new date", new Date());
+//     events.forEach((e) => {
+//       console.log("start day", typeof (e.start_date));
+//       let date = new Date(e.start_date).toISOString();
+//       let dateToCompareWithSecond = new Date();
+//       let dateToCompareWithout = moment(dateToCompareWithSecond).seconds(0).milliseconds(0).toISOString();
+//       console.log("outPut: dateToCompareWithout", dateToCompareWithout)
+//       // let dateToCompare = dateToCompareWithout.getTime()
+//       // console.log("outPut: dateToCompare", dateToCompare)
+
+//       if (date == dateToCompareWithout) {
+//         console.log("event", e);
+//         userId = e._userId
+//       }
+//       return userId
+//     });
+//     console.log("userId", userId);
+//     return userId
+//   }).then((userId) => {
+//     return User.findOne({
+//       _id: userId
+//     })
+//   }).then((user) => {
+//     console.log("user", user);
+//     userEmail = user.email
+//     let mailOptions = {
+//       from: "ourmeetingapp@gmail.com",
+//       to: userEmail,
+//       subject: `Not a GDPR update ;)`,
+//       text: `Hi there, this email was automatically sent by us`
+//     };
+//     transporter.sendMail(mailOptions, function (error, info) {
+//       if (error) {
+//         throw error;
+//       } else {
+//         console.log("Email successfully sent!");
+//       }
+//     });
+//   })
+
+// });
 
 module.exports = app;

@@ -64,14 +64,8 @@ router.post("/signup", signUpValidation, (req, res) => {
     from: "ourmeetingapp@gmail.com",
     to: user.email,
     subject: "Account Verification Token",
-    text: "Hello,\n\n" +
-      "Please verify your account by clicking the link: \nhttp://" +
-      req.headers.host +
-      "/confirmations/" +
-      token.token +
-      ".\n"
     // check why it's not working
-    // html: `<a href= "http://${req.headers.host }/confirmations/ ${token.token }">verify your email</a>`
+    html: `<a href= "http://${req.headers.host}/confirmations/${token.token}">verify your email</a>`
   };
   // render the res after signup
   transporter.sendMail(mailOptions, function (err) {
