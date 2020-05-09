@@ -9,6 +9,8 @@ const momentTimezone = require("moment-timezone");
 const moment = require("moment");
 const nodemailer = require("nodemailer");
 const cron = require("node-cron");
+const mongoose = require("mongoose");
+
 
 
 //email authorization
@@ -22,45 +24,59 @@ const transporter = nodemailer.createTransport({
 
 cron.schedule("* * * * *", function () {
     Event.find().then((events) => {
-        let userId;
-        console.log("event", events);
-        console.log("new date", new Date());
-        events.forEach((e) => {
-            console.log("start day", typeof (e.start_date));
-            let date = new Date(e.start_date).toISOString();
-            let dateToCompareWithSecond = new Date();
-            let dateToCompareWithout = moment(dateToCompareWithSecond).seconds(0).milliseconds(0).toISOString();
-            console.log("outPut: dateToCompareWithout", dateToCompareWithout)
-
-            if (date == dateToCompareWithout) {
-                console.log("event", e);
-                userId = e._userId
+            let userIds = []
+            events.forEach((e) => {
+                let date = moment.utc(e.start_date).seconds(0).milliseconds(0);
+                console.log("outPut: date", date)
+                // new Date(e.start_date).toISOString();
+                let dateToCompareWithSecond = new Date();
+                let dateToCompare = moment.utc(dateToCompareWithSecond).seconds(0).milliseconds(0);
+                console.log("outPut: dateToCompareWithout", dateToCompare)
+                if ((date.isSame(dateToCompare, "second") || date.isBefore(dateToCompare, "second")) && !e.sentReminder) {
+                    console.log("event remind", e.sentReminder);
+                    userIds.push(...e.attendList);
+                    e.sentReminder = true;
+                    console.log("event remind", e.sentReminder);
+                    e.save()
+                }
+            });
+            console.log("userIds", userIds);
+            let userIdsToUse = []
+            if (userIds.length >= 0) {
+                userIds.forEach((id) => {
+                    userIdsToUse.push(new mongoose.Types.ObjectId(id))
+                    return userIdsToUse
+                });
+                console.log("user id to use", userIdsToUse);
             }
-        });
-        console.log("userId", userId);
-        userId
-
-        return User.findOne({
-            _id: userId
+            return User.find({
+                _id: {
+                    $in: userIdsToUse
+                }
+            })
         })
-    }).then((user) => {
-        console.log("user", user);
-        userEmail = user.email
-        let mailOptions = {
-            from: "ourmeetingapp@gmail.com",
-            to: userEmail,
-            subject: `reminder email`,
-            text: `Hi there, this email was automatically sent by us`
-        };
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                throw error;
-            } else {
-                console.log("Email successfully sent!");
-            }
+        .then((users) => {
+            console.log("users", users);
+            let mailList = "";
+            users.forEach((user) => {
+                mailList += user.email + ','
+                console.log("userId", user._id);
+            })
+            console.log("mailList", mailList);
+            let mailOptions = {
+                from: "ourmeetingapp@gmail.com",
+                to: mailList,
+                subject: `reminder email`,
+                text: `Hi there, this email was automatically sent by us`
+            };
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log("error", error);
+                } else {
+                    console.log("Email successfully sent!");
+                }
+            });
         });
-    })
-
 });
 
 module.exports = router;

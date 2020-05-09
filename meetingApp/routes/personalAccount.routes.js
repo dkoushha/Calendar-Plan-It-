@@ -89,6 +89,7 @@ router.post("/data", (req, res) => {
         text: req.body.text,
         start_date: req.body.start_date,
         end_date: req.body.end_date,
+        sentReminder: false,
       }, {
         new: true,
       },
@@ -110,6 +111,7 @@ router.post("/data", (req, res) => {
       end_date: req.body.end_date,
       _userId: req.user.id,
       attendList: req.user.id,
+
     });
     event.save();
     update_response();

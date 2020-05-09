@@ -7,9 +7,9 @@ const eventSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
   },
-  attendList:[{
+  attendList: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", 
+    ref: "User",
   }],
   text: {
     type: String,
@@ -23,6 +23,10 @@ const eventSchema = new Schema({
   id: {
     type: String,
   },
+  sentReminder: {
+    type: Boolean,
+    default: false
+  }
 });
 
 // eventSchema.plugin(timeZone, {
