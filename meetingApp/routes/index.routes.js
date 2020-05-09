@@ -6,4 +6,8 @@ const router = express.Router();
 //   res.render('index');
 // });
 
+router.get('/about', (req, res) =>{
+  res.render('about')
+})
+
 module.exports = router;
