@@ -36,16 +36,44 @@ body {
 }
 
 .dhx_cal_navline {
-  background: linear-gradient(to left, #434E5F, #00adb5);
+  background: linear-gradient(to left, #434e5f, #00adb5);
 }
 
 /* personal account css */
 
 #upload-file-label {
-  border: solid #434E5F;
-  font-size: 16px;
+  border: solid #434e5f;
+  font-size: 14px;
 }
 
 #myFile {
   display: none;
+}
+
+.img-button {
+  border-radius: 20px;
+  border: 1px solid #f2a51a;
+  background-color: #f2a51a;
+  color: #393e46;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 10px;
+  letter-spacing: 1px;
+  transition: transform 80ms ease-in;
+}
+
+.img-button-top {
+  margin-top: 3px;
+}
+
+#invite-button {
+  border-radius: 20px;
+  border: 1px solid #f2a51a;
+  background-color: #f2a51a;
+  color: #393e46;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 10px;
+  letter-spacing: 1px;
+  transition: transform 80ms ease-in;
 }
