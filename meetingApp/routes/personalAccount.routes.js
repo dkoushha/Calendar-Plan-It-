@@ -156,12 +156,13 @@ router.post(
 
     } else {
       console.log("req.file", req.file);
-      const imageURL = req.file.secure_url;
+      const imageURL = req.file.url;
       User.findById(req.user._id).then((user) => {
         user.image = imageURL;
-        user.save()
+        return user.save()
+      }).then(() => {
         res.redirect("personalAccount");
-      });
+      })
     }
   });
 
