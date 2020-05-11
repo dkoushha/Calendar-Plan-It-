@@ -100,7 +100,29 @@ router.post("/data", (req, res) => {
 
 //find out time zone
 //for the user from ip
-router.get("/personalAccount", checkVerifiedUser, (req, res) => {
+let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: process.env.GMAIL_USERNAME,
+        pass: process.env.GMAIL_PASSWORD,
+    },
+});
+
+router.get("/personalAccount", checkVerifiedUser, (req, res) => {    
+    console.log(req.user);
+    let dataToClientSide = [];
+    Event.find().then((dataToSend) => {
+        dataToSend.forEach((e) => {
+            if (e._userId == req.user.id) {
+                dataToClientSide.push(e);
+            }
+        });
+        console.log("DATA CLIENT SIDE", dataToClientSide);
+        // res.render("auth/personalAccount", {
+        //     events: dataToClientSide
+        // });
+        return axios.get("http://ip-api.com/json")
+    });
   axios.get("http://ip-api.com/json").then((response) => {
       console.log("Latitude: ", response.data.lat);
       console.log("Longitude", response.data.lon);
@@ -119,6 +141,7 @@ router.get("/personalAccount", checkVerifiedUser, (req, res) => {
       res.render("auth/personalAccount", {
         user: req.user,
         zone: response.data,
+        events: dataToClientSide
       });
     });
 });

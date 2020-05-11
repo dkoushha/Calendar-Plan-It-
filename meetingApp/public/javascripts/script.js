@@ -1,11 +1,12 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    console.log("IronGenerator JS imported successfully!");
+  },
+  false
+);
 
-  console.log('IronGenerator JS imported successfully!');
-
-}, false);
-
-
-// personal page js 
+// personal page js
 
 // calendar function
 function init() {
@@ -30,8 +31,8 @@ n = new Date();
 y = n.getFullYear();
 m = n.getMonth() + 1;
 d = n.getDate();
-m = checkTime(m)
-d = checkTime(d)
+m = checkTime(m);
+d = checkTime(d);
 document.getElementById("date").innerHTML = d + "." + m + "." + y;
 
 function startTime() {
@@ -42,20 +43,38 @@ function startTime() {
   h = checkTime(h);
   m = checkTime(m);
   s = checkTime(s);
-  document.getElementById('txt').innerHTML =
-    h + ":" + m + ":" + s;
+  document.getElementById("txt").innerHTML = h + ":" + m + ":" + s;
   let t = setTimeout(startTime, 500);
 }
 
 function checkTime(i) {
   if (i < 10) {
-    i = "0" + i
-  }; // add zero in front of numbers < 10
+    i = "0" + i;
+  } // add zero in front of numbers < 10
   return i;
 }
 
-// it calls when loading the page 
+// it calls when loading the page
 function start() {
-  init()
-  startTime()
+  init();
+  startTime();
 }
+
+// Add new input field when button pressed
+
+function addInputField(){
+  
+  let input= document.createElement('input');
+  let br= document.createElement('br')
+  input.setAttribute('type','email');
+  input.setAttribute('name','email')
+  input.setAttribute('placeholder','Email')
+  document.querySelectorAll('.invite-form div')[0].appendChild(input)
+  document.querySelectorAll('.invite-form div')[0].appendChild(br)
+  
+}
+// function removeInputField(){
+//     let inputField=document.querySelectorAll('.invite-form div')[0];
+//     inputField.removeChild(inputField.lastChild)  
+// }
+
