@@ -11,30 +11,9 @@ const axios = require("axios");
 const nodemailer = require("nodemailer");
 const Token = require("../models/Token");
 const randomToken = require("random-token");
-// for uploading images
-const cloudinary = require("cloudinary");
-const cloudinaryStorage = require("multer-storage-cloudinary");
-// package to allow <input type="file"> in forms
-const multer = require("multer");
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET,
-});
 
-var storage = cloudinaryStorage({
-  cloudinary: cloudinary,
-  folder: "profile-pictures", // The name of the folder in cloudinary
-  allowedFormats: ["jpg", "png"],
-  filename: function (req, file, cb) {
-    cb(null, file.originalname); // The file on cloudinary would have the same name as the original file name
-  },
-});
 
-const uploadCloud = multer({
-  storage: storage,
-});
 
 //fetch the data from database when loading the calender
 router.get("/data", function (req, res) {
@@ -144,37 +123,6 @@ router.get("/personalAccount", (req, res) => {
     });
 });
 
-
-// upload profile picture route
-router.post(
-  "/upload-profile-img",
-  uploadCloud.single("user-img"),
-  (req, res) => {
-    // this is what cloudinary sets on req.file ==> namely the file's public URL
-    if (!req.file) {
-      res.redirect("personalAccount")
-
-    } else {
-      console.log("req.file", req.file);
-      const imageURL = req.file.url;
-      User.findById(req.user._id).then((user) => {
-        user.image = imageURL;
-        return user.save()
-      }).then(() => {
-        res.redirect("personalAccount");
-      })
-    }
-  });
-
-router.post("/delete-profile-img", uploadCloud.single("user-img"), (req, res) => {
-  User.findByIdAndUpdate({
-    _id: req.user._id
-  }, {
-    image: `https://api.adorable.io/avatars/59/${req.user.email}`
-  }).then(() => {
-    res.redirect("personalAccount");
-  });
-});
 
 
 // email authorization
