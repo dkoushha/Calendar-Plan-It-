@@ -44,8 +44,15 @@ body {
 /* personal account css */
 
 #upload-file-label {
-  border: solid #434e5f;
-  font-size: 14px;
+  border-radius: 20px;
+  border: 1px solid #f2a51a;
+  background-color: #f2a51a;
+  color: #393e46;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 10px;
+  letter-spacing: 1px;
+  transition: transform 80ms ease-in;
 }
 
 #myFile {
