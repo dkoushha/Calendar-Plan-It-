@@ -31,15 +31,11 @@ router.post(
     "/upload-profile-img",
     uploadCloud.single("user-img"),
     (req, res) => {
-        // this is what cloudinary sets on req.file ==> namely the file's public URL
         if (!req.file) {
             res.redirect("personalAccount")
-
         } else {
             console.log("req.file", req.file);
             const imageURL = req.file.url;
-            const imgName = req.file.originalname;
-
             User.findById(req.user._id).then((user) => {
                 user.image = imageURL;
                 return user.save()

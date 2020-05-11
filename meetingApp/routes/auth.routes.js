@@ -38,12 +38,14 @@ router.get("/", (req, res) => {
 // signup, signUpValidation in the helpers folder
 router.post("/signup", signUpValidation, (req, res) => {
   // get the validation errors 
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.render("auth/signupForm", {
       errors: errors.array(),
     });
   }
+
   // save new user 
   const salt = bcrypt.genSaltSync(bcryptSalt);
   const hashPass = bcrypt.hashSync(req.body.password, salt);
@@ -56,7 +58,7 @@ router.post("/signup", signUpValidation, (req, res) => {
   // create new token for the user to verify its email 
   const token = new Token({
     _userId: user._id,
-    _eventId:user._id,
+    _eventId: user._id,
     token: randomToken(16),
   });
   token.save();
@@ -88,7 +90,6 @@ router.get("/confirmations/:token", (req, res) => {
       token: req.params.token,
     })
     .then((token) => {
-      console.log("outPut: token", token);
       return User.findOne({
         _id: token._userId,
       });

@@ -43,6 +43,7 @@ router.get("/invite", (req, res) => {
 });
 
 router.post("/invite", (req, res) => {
+    console.log("req.body", req.body.email);
     User.findOne({
             email: req.body.email
         })

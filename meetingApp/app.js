@@ -142,6 +142,8 @@ const personalAccount = require("./routes/personalAccount.routes");
 app.use("/", personalAccount);
 const profileImg = require("./routes/profileImg.routes");
 app.use("/", profileImg);
+const eventInvite = require("./routes/eventInvite.routes");
+app.use("/", eventInvite);
 
 
 

@@ -2,6 +2,7 @@ const {
     check,
 } = require('express-validator');
 const User = require("../models/User.model");
+const alert = require("alert")
 
 
 
@@ -22,9 +23,20 @@ let signUpValidation = [
     }).withMessage('Password must be at least 5 chars long')
 ];
 
-// set up nodemailer to send invitation email to an event
 
+let checkVerifiedUser = (req, res, next) => {
+    console.log(req.user.isVerified);
+    if (req.user.isVerified) {
+        next();
+    } else {
+        let message = 'Please verify your email to login to your account';
+        res.render("auth/signupForm", {
+            message: message
+        });
+    }
+};
 
 module.exports = {
-    signUpValidation: signUpValidation
+    signUpValidation: signUpValidation,
+    checkVerifiedUser: checkVerifiedUser
 }
