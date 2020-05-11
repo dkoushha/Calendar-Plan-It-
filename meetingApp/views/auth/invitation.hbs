@@ -1,10 +1,12 @@
 <h1>Please select the user you want to invite:</h1>
 <form action="/invite" method="POST">
-  {{#each events}}
   <select name="event">
+
+    {{#each events}}
     <option value="{{this._id}}">{{this.text}}</option>
+    {{/each}}
   </select>
-  {{/each}}
+
 
   <input type="email" name="email" placeholder="Email" />
   <button type="submit">Invite</button>

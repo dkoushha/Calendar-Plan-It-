@@ -83,20 +83,24 @@ router.post("/data", (req, res) => {
   }
   // edit an event
   if (mode == "updated") {
-    Event.findOneAndUpdate({
+    Event.findOneAndUpdate(
+      {
         id: req.body.id,
-      }, {
+      },
+      {
         text: req.body.text,
         start_date: req.body.start_date,
         end_date: req.body.end_date,
-      }, {
+      },
+      {
         new: true,
       },
       update_response
     );
     // delete an event
   } else if (mode == "deleted") {
-    Event.findOneAndDelete({
+    Event.findOneAndDelete(
+      {
         id: req.body.id,
       },
       update_response
@@ -119,19 +123,20 @@ router.post("/data", (req, res) => {
 //find out time zone
 //for the user from ip
 router.get("/personalAccount", (req, res) => {
-  axios.get("http://ip-api.com/json").then((response) => {
+  axios
+    .get("http://ip-api.com/json")
+    .then((response) => {
       console.log("Latitude: ", response.data.lat);
       console.log("Longitude", response.data.lon);
       let userLat = response.data.lat;
       let userLon = response.data.lon;
       //API Key:EUU8LOIMTSKG
-      return axios
-        .get(
-          "http://api.timezonedb.com/v2.1/get-time-zone?key=EUU8LOIMTSKG&format=json&by=position&lat=" +
+      return axios.get(
+        "http://api.timezonedb.com/v2.1/get-time-zone?key=EUU8LOIMTSKG&format=json&by=position&lat=" +
           userLat +
           "&lng=" +
           userLon
-        )
+      );
     })
     .then((response) => {
       console.log("req.user", req.user);
@@ -142,7 +147,6 @@ router.get("/personalAccount", (req, res) => {
     });
 });
 
-
 // upload profile picture route
 router.post(
   "/upload-profile-img",
@@ -150,29 +154,35 @@ router.post(
   (req, res) => {
     // this is what cloudinary sets on req.file ==> namely the file's public URL
     if (!req.file) {
-      res.redirect("personalAccount")
-
+      res.redirect("personalAccount");
     } else {
       console.log("req.file", req.file);
       const imageURL = req.file.secure_url;
       User.findById(req.user._id).then((user) => {
         user.image = imageURL;
-        user.save()
+        user.save();
         res.redirect("personalAccount");
       });
     }
-  });
+  }
+);
 
-router.post("/delete-profile-img", uploadCloud.single("user-img"), (req, res) => {
-  User.findByIdAndUpdate({
-    _id: req.user._id
-  }, {
-    image: `https://api.adorable.io/avatars/59/${req.user.email}`
-  }).then(() => {
-    res.redirect("personalAccount");
-  });
-});
-
+router.post(
+  "/delete-profile-img",
+  uploadCloud.single("user-img"),
+  (req, res) => {
+    User.findByIdAndUpdate(
+      {
+        _id: req.user._id,
+      },
+      {
+        image: `https://api.adorable.io/avatars/59/${req.user.email}`,
+      }
+    ).then(() => {
+      res.redirect("personalAccount");
+    });
+  }
+);
 
 // email authorization
 let transporter = nodemailer.createTransport({
@@ -198,15 +208,15 @@ router.get("/invite", (req, res) => {
   });
 
   res.render("auth/invitation", {
-    events: dataToClientSide
+    events: dataToClientSide,
   });
   //res.render('auth/invite')
 });
 
 router.post("/invite", (req, res) => {
   User.findOne({
-      email: req.body.email
-    })
+    email: req.body.email,
+  })
     .then((user) => {
       console.log("Invited user ID", user._id);
       return user;
@@ -224,7 +234,8 @@ router.post("/invite", (req, res) => {
         from: "ourmeetingapp@gmail.com",
         to: req.body.email,
         subject: "Invitation Token",
-        text: "Hello,\n\n" +
+        text:
+          "Hello,\n\n" +
           `Please verify your invitation made by ${req.user.email} and clicking the link: \nhttp://` +
           req.headers.host +
           "/invitationConfirmation/" +
@@ -251,8 +262,8 @@ router.post("/invite", (req, res) => {
 router.get("/invitationConfirmation/:token", (req, res) => {
   console.log(req.params.token);
   Token.findOne({
-      token: req.params.token
-    })
+    token: req.params.token,
+  })
     .then((token) => {
       console.log("This is the token", token);
       let inviteInfoAndEventInfo = [];
@@ -263,18 +274,23 @@ router.get("/invitationConfirmation/:token", (req, res) => {
       // });
       console.log("Invited user and Event", inviteInfoAndEventInfo);
 
-      return Event.findOneAndUpdate({
-        _id: token._eventId
-      }, {
-        $addToSet: {
-          attendList: token.invitedUserId
+      return Event.findOneAndUpdate(
+        {
+          _id: token._eventId,
+        },
+        {
+          $addToSet: {
+            attendList: token.invitedUserId,
+          },
+        },
+        {
+          new: true,
         }
-      }, {
-        new: true
-      })
-    }).then(() => {
-      console.log('User pushed to attendlist');
-      res.send("Token confirmation");
+      );
     })
+    .then(() => {
+      console.log("User pushed to attendlist");
+      res.send("Token confirmation");
+    });
 });
 module.exports = router;
