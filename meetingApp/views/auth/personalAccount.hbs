@@ -24,34 +24,21 @@
   <a id="invite-button" href="/invite">Invite</a>
   <a id="invite-button" href="/invite">Alert</a>
 </div>
-<<<<<<< HEAD=======<div id="invite-form">
-  <h1>Please select the user you want to invite:</h1>
-  <form action="/invite" method="POST">
-    <select name="event">
-      {{#each events}}
-      <option value="{{this._id}}">{{this.text}}</option>
-      {{/each}}
-    </select>
-    <input type="email" name="email" placeholder="Email" />
-    <button id="invite-button" type="submit">Invite</button>
-  </form>
-  </div>
-  >>>>>>> 63974dae66b77ae67dd2055f144ccc62d0486297
 
-  <body onload="start();">
-    <div id="scheduler_here" class="dhx_cal_container" style="width: 80%; height: 60%; margin: 0 auto;">
-      <div class="dhx_cal_navline">
-        <div class="dhx_cal_prev_button">&nbsp;</div>
-        <div class="dhx_cal_next_button">&nbsp;</div>
-        <div class="dhx_cal_today_button"></div>
-        <div class="dhx_cal_date"></div>
-        <div class="dhx_cal_tab" name="day_tab"></div>
-        <div class="dhx_cal_tab" name="week_tab"></div>
-        <div class="dhx_cal_tab" name="month_tab"></div>
-      </div>
-      <div class="dhx_cal_header"></div>
-      <div class="dhx_cal_data"></div>
+<body onload="start();">
+  <div id="scheduler_here" class="dhx_cal_container" style="width: 80%; height: 60%; margin: 0 auto;">
+    <div class="dhx_cal_navline">
+      <div class="dhx_cal_prev_button">&nbsp;</div>
+      <div class="dhx_cal_next_button">&nbsp;</div>
+      <div class="dhx_cal_today_button"></div>
+      <div class="dhx_cal_date"></div>
+      <div class="dhx_cal_tab" name="day_tab"></div>
+      <div class="dhx_cal_tab" name="week_tab"></div>
+      <div class="dhx_cal_tab" name="month_tab"></div>
     </div>
+    <div class="dhx_cal_header"></div>
+    <div class="dhx_cal_data"></div>
+  </div>
 
-    <script src="/javascripts/script"></script>
-    <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js"></script>
+  <script src="/javascripts/script"></script>
+  <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js"></script>
