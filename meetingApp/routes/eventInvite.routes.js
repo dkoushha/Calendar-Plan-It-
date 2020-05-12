@@ -101,7 +101,6 @@ router.get("/invitationConfirmation/:token", (req, res) => {
                 new: true
             })
         }).then(() => {
-            console.log('User pushed to attendlist');
             res.redirect("/");
         })
 });
