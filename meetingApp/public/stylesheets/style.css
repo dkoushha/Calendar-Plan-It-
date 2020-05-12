@@ -243,7 +243,9 @@ body {
 }
 
 #profile-img {
-  height: 80px;
+  height: 100px;
   width: auto;
   margin-bottom: 5px;
+  border-radius: 50%;
+  border: 5px solid black;
 }

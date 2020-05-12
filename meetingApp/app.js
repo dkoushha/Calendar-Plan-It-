@@ -146,7 +146,8 @@ const eventInvite = require("./routes/eventInvite.routes");
 app.use("/", eventInvite);
 const alerted = require("./routes/alert.routes");
 app.use("/", alerted);
-
+const reminder = require("./routes/reminder.routes");
+app.use("/", reminder);
 
 
 module.exports = app;

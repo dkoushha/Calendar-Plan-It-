@@ -15,47 +15,33 @@ router.get("/invite", (req, res) => {
 
 router.post("/reminder", (req, res) => {
     console.log("what i need to see", req.body);
-    // User.findOne({
-    //         email: req.body.email
-    //     })
-    //     .then((user) => {
-    //         console.log("Invited user ID", user._id);
-    //         return user;
-    //     })
-    //     .then((user) => {
-    //         const token = new Token({
-    //             _eventId: req.body.event,
-    //             _userId: req.user.id,
-    //             invitedUserId: user._id,
-    //             token: randomToken(16),
-    //         });
-    //         token.save();
-    //         console.log("token wiht invited user ID", token);
-    //         const mailOptions = {
-    //             from: "ourmeetingapp@gmail.com",
-    //             to: req.body.email,
-    //             subject: "Invitation Token",
-    //             text: "Hello,\n\n" +
-    //                 `Please verify your invitation made by ${req.user.email} and clicking the link: \nhttp://` +
-    //                 req.headers.host +
-    //                 "/invitationConfirmation/" +
-    //                 token.token +
-    //                 ".\n",
-    //         };
+    console.log("events", req.body.events);
+    console.log("alertOption", req.body.alertOption);
 
-    //         transporter.sendMail(mailOptions, function (err) {
-    //             if (err) {
-    //                 return res.send({
-    //                     msg: err.message,
-    //                 });
-    //             }
-    //             let inviteEmail = req.body.email;
-    //             res.render("auth/invitationConfirmation", {
-    //                 inviteEmail: inviteEmail,
-    //             });
-    //         });
-    //     });
-    res.send("worked")
+    Event.findOne({
+        _id: req.body.events
+    }).then((event) => {
+        console.log("event", event.start_date);
+        let remindTime;
+        switch (req.body.alertOption) {
+            case "day":
+                console.log("day");
+                remindTime = moment(event.start_date).subtract(1, "day");
+                break;
+            case "hour":
+                console.log("hour");
+                remindTime = moment(event.start_date).subtract(6, "hour");
+                break;
+            case "days":
+                console.log("days");
+                remindTime = moment(event.start_date).subtract(2, "day")
+                break;
+        }
+        event.remindTime = remindTime;
+        event.save()
+        res.redirect("/personalAccount")
+    })
+
 });
 
 

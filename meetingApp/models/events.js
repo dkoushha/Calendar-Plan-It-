@@ -27,7 +27,7 @@ const eventSchema = new Schema({
     type: Boolean,
     default: false
   },
-  alertDay: {
+  remindTime: {
     type: Date
   }
 });
