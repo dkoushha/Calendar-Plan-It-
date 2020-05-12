@@ -55,7 +55,12 @@ router.post("/invite", (req, res) => {
                 invitedUserId: user._id,
                 token: randomToken(16),
             });
-            token.save()
+
+            return Promise.all([token.save(), Event.findOne({
+                _id: req.body.event
+            })])
+        }).then((array) => {
+            console.log("array", array);
             const mailOptions = {
                 from: "ourmeetingapp@gmail.com",
                 to: req.body.email,
@@ -75,6 +80,7 @@ router.post("/invite", (req, res) => {
             });
         });
 });
+
 
 router.get("/invitationConfirmation/:token", (req, res) => {
     console.log(req.params.token);

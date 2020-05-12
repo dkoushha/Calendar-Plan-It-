@@ -2,21 +2,21 @@
 <style>
     .select-dropdown {
         position: relative;
-        background-color: #eee;
+        background-color: #e6e6e6;
         width: auto;
         float: left;
         max-width: 100%;
+        border-radius: 2px;
     }
 
     .select-dropdown select {
         font-family: "helvetica neue", helvetica;
-        font-size: .8rem;
+        font-size: 1rem;
         font-weight: 200;
         max-width: 100%;
-        min-width: 30px;
-        padding: 12px 15px;
+        padding: 8px 24px 8px 10px;
         border: none;
-        background-color: #eee;
+        background-color: transparent;
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
@@ -24,7 +24,7 @@
 
     .select-dropdown select:active,
     .select-dropdown select:focus {
-        outline: #00adb5;
+        outline: none;
         box-shadow: none;
     }
 
@@ -40,6 +40,7 @@
         border-right: 5px solid transparent;
         border-top: 5px solid #aaa;
     }
+
 
     .select-dropdown {
         margin-bottom: 10px;
@@ -84,14 +85,14 @@
             <form action="/invite" method="POST">
                 <h1>Invite</h1>
                 <div class="select-dropdown">
-                    <select name="event">
+                    <select class="select" name="event">
                         {{#each events}}
                         <option value="{{this._id}}">{{this.text}}</option>
                         {{/each}}
                     </select>
                 </div>
-                <div>
-                    <input type="email" name="email" placeholder="Email" />
+                <div class="inputInvite">
+                    <input type="email" name="email" placeholder="Email">
                 </div>
                 <button type="submit">Invite</button>
             </form>
@@ -126,15 +127,17 @@
         console.log("outPut: addInputField -> count", count)
         if (count <= max) {
             let input = document.createElement("input");
+            console.log("outPut: addInputField -> input", input)
             let br = document.createElement("br");
+            console.log("outPut: addInputField -> br", br)
             input.setAttribute("type", "email");
             input.setAttribute("name", "email");
             input.setAttribute("placeholder", "Email");
+            document.querySelectorAll(".sign-in-container .inputInvite ")[0].appendChild(input);
+            document.querySelectorAll(".sign-in-container .inputInvite")[0].appendChild(br);
             console.log(document.querySelectorAll(".form-container"));
-            document.querySelectorAll(".form-container div ")[0].appendChild(input);
-            document.querySelectorAll(".form-container div")[0].appendChild(br);
+
             document.getElementById("create-input").style.top = topPosition + "%";
         }
     }
-
 </script>
