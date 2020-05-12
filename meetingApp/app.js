@@ -136,14 +136,16 @@ app.use("/", index);
 
 const auth = require("./routes/auth.routes");
 app.use("/", auth);
-const reminder = require("./routes/reminder.routes");
-app.use("/", reminder);
+// const reminder = require("./routes/reminder.routes");
+// app.use("/", reminder);
 const personalAccount = require("./routes/personalAccount.routes");
 app.use("/", personalAccount);
 const profileImg = require("./routes/profileImg.routes");
 app.use("/", profileImg);
 const eventInvite = require("./routes/eventInvite.routes");
 app.use("/", eventInvite);
+const alerted = require("./routes/alert.routes");
+app.use("/", alerted);
 
 
 

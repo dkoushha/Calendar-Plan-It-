@@ -35,21 +35,18 @@ router.get("/invite", (req, res) => {
         });
         console.log("Data to clint side", dataToClientSide);
     });
-
-    res.render("auth/invitation", {
+    res.render("auth/alert-invite", {
         events: dataToClientSide
     });
     //res.render('auth/invite')
 });
 
 router.post("/invite", (req, res) => {
+    let userEmail = (req.user.email).split("@");
+    let userName = userEmail[0];
     console.log("req.body", req.body.email);
     User.findOne({
             email: req.body.email
-        })
-        .then((user) => {
-            console.log("Invited user ID", user._id);
-            return user;
         })
         .then((user) => {
             const token = new Token({
@@ -58,20 +55,13 @@ router.post("/invite", (req, res) => {
                 invitedUserId: user._id,
                 token: randomToken(16),
             });
-            token.save();
-            console.log("token wiht invited user ID", token);
+            token.save()
             const mailOptions = {
                 from: "ourmeetingapp@gmail.com",
                 to: req.body.email,
                 subject: "Invitation Token",
-                text: "Hello,\n\n" +
-                    `Please verify your invitation made by ${req.user.email} and clicking the link: \nhttp://` +
-                    req.headers.host +
-                    "/invitationConfirmation/" +
-                    token.token +
-                    ".\n",
+                html: `<h3>${userName} has sent you an invitation for an event on <a href= "http://${req.headers.host}/invitationConfirmation/${token.token}">verify your email</a>`
             };
-
             transporter.sendMail(mailOptions, function (err) {
                 if (err) {
                     return res.send({
@@ -112,7 +102,7 @@ router.get("/invitationConfirmation/:token", (req, res) => {
             })
         }).then(() => {
             console.log('User pushed to attendlist');
-            res.send("Token confirmation");
+            res.redirect("/");
         })
 });
 module.exports = router;

@@ -18,7 +18,6 @@ const checkVerifiedUser = require("../helpers/middlewares").checkVerifiedUser
 
 //fetch the data from database when loading the calender
 router.get("/data", (req, res) => {
-  //Event.find({attendList: req.body.user})
   let dataToClientSide = [];
   Event.find().then((dataToSend) => {
     dataToSend.forEach((e) => {
@@ -26,12 +25,8 @@ router.get("/data", (req, res) => {
       let localTime = utcTime.local();
       e.start_date = localTime;
     });
-    console.log("Data", dataToSend);
-    console.log("User ID", req.user.id);
     dataToSend.forEach((e) => {
-      console.log("Event user ID", e._userId);
-      if (e._userId == req.user.id) {
-        console.log("Element", e);
+      if (e.attendList.includes(req.user.id)) {
         dataToClientSide.push(e);
       }
     });
@@ -91,16 +86,19 @@ router.post("/data", (req, res) => {
       end_date: req.body.end_date,
       _userId: req.user.id,
       attendList: req.user.id,
-
     });
     event.save();
     update_response();
   } else res.send("Not supported operation");
 });
 
+
+
 //find out time zone
 //for the user from ip
 router.get("/personalAccount", checkVerifiedUser, (req, res) => {
+  let userEmail = (req.user.email).split("@")
+  let userName = userEmail[0]
   axios.get("http://ip-api.com/json").then((response) => {
       console.log("Latitude: ", response.data.lat);
       console.log("Longitude", response.data.lon);
@@ -119,6 +117,7 @@ router.get("/personalAccount", checkVerifiedUser, (req, res) => {
       res.render("auth/personalAccount", {
         user: req.user,
         zone: response.data,
+        userName: userName
       });
     });
 });

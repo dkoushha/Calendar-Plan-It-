@@ -9,23 +9,26 @@ const eventSchema = new Schema({
   },
   attendList: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "User"
   }],
   text: {
-    type: String,
+    type: String
   },
   start_date: {
-    type: Date,
+    type: Date
   },
   end_date: {
-    type: Date,
+    type: Date
   },
   id: {
-    type: String,
+    type: String
   },
   sentReminder: {
     type: Boolean,
     default: false
+  },
+  alertDay: {
+    type: Date
   }
 });
 

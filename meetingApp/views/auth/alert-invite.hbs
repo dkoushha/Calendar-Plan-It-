@@ -1,0 +1,77 @@
+<link rel="stylesheet" href="/stylesheets/signupForm.css">
+
+<div class="body-container">
+
+    <div class="container-signupForm" id="container">
+        <div class="form-container sign-up-container">
+            <form action="/reminder" method="POST">
+                <h1>Set a reminder</h1>
+                <select name="events">
+                    {{#each events}}
+                    <option value="{{this._id}}">{{this.text}}</option>
+                    {{/each}}
+                </select>
+                <select name="alertOption">
+                    <option value="days">Alert 2 days before</option>
+                    <option value="day">Alert 1 day before</option>
+                    <option value="hour">Alert 6 hours before</option>
+                </select>
+                <button type="submit">Done</button>
+            </form>
+        </div>
+        <div class="form-container sign-in-container">
+            <form action="/invite" method="POST">
+                <h1>Invite</h1>
+                <select name="event">
+                    {{#each events}}
+                    <option value="{{this._id}}">{{this.text}}</option>
+                    {{/each}}
+                </select>
+                <div>
+                    <input type="email" name="email" placeholder="Email" />
+                </div>
+                <button type="submit">Invite</button>
+            </form>
+            <button id="create-input" onclick="addInputField()">Invite new user</button>
+
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Invition page</h1>
+                    <p>invite someone to your cool event</p>
+                    <button class="ghost" id="signIn">Invite</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Alert</h1>
+                    <p>choose an event</p>
+                    <button class="ghost" id="signUp">Alert</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+</footer>
+<script src="/javascripts/signupForm.js"></script>
+<script>
+    let count = 0;
+    let max = 4;
+    let topPosition = 70;
+    function addInputField() {
+        count += 1;
+        topPosition += 5;
+        console.log("outPut: addInputField -> count", count)
+        if (count <= max) {
+            let input = document.createElement("input");
+            let br = document.createElement("br");
+            input.setAttribute("type", "email");
+            input.setAttribute("name", "email");
+            input.setAttribute("placeholder", "Email");
+            console.log(document.querySelectorAll(".form-container"));
+            document.querySelectorAll(".form-container div ")[0].appendChild(input);
+            document.querySelectorAll(".form-container div")[0].appendChild(br);
+            document.getElementById("create-input").style.top = topPosition + "%";
+        }
+    }
+</script>

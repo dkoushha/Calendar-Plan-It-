@@ -23,6 +23,23 @@ a {
   width: 200px;
 }
 
+/* invitation confirmation page css  */
+
+#linkBackToAccount {
+  text-decoration: none;
+  border-radius: 20px;
+  border: 1px solid #f2a51a;
+  background-color: #f2a51a;
+  color: #393e46;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 10px;
+  letter-spacing: 1px;
+  transition: transform 80ms ease-in;
+}
+
+
+
 /* calendar css */
 html,
 body {
