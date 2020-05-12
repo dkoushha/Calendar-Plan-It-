@@ -4,19 +4,18 @@
 <link rel="stylesheet" href="/stylesheets/style.css">
 
 <div class="container-content">
-  <img src={{user.image}} id="profileImg">
+  <img id="profile-img" src={{user.image}} id="profileImg">
   <section>
-    <h5>change your profile picture</h5>
     <form action="/upload-profile-img" method="post" enctype="multipart/form-data">
       <input type="file" name="user-img" id="myFile">
-      <label for="myFile" id="upload-file-label">Choose your file</label>
-      <button type="submit" class="img-button">Submit</button>
+      <label for="myFile" id="upload-file-label">Choose profile picture</label>
+      <button type="submit" class="img-button">Upload</button>
     </form>
     <form action="/delete-profile-img" method="POST">
-      <button class="img-button img-button-top" type="submit">Delete your image</button>
+      <button class="img-button img-button-top" type="submit">Delete profile picture</button>
     </form>
   </section>
-  <p>Welcome to {{userName}}</p>
+  <p id="welcome-margin-top">Welcome to {{userName}}</p>
   <p>Country Name: {{zone.countryName}}</p>
   <p>Zone Name: {{zone.zoneName}}</p>
   <p id="date"></p>
@@ -25,21 +24,34 @@
   <a id="invite-button" href="/invite">Invite</a>
   <a id="invite-button" href="/invite">Alert</a>
 </div>
-
-<body onload="start();">
-  <div id="scheduler_here" class="dhx_cal_container" style="width: 80%; height: 60%; margin: 0 auto;">
-    <div class="dhx_cal_navline">
-      <div class="dhx_cal_prev_button">&nbsp;</div>
-      <div class="dhx_cal_next_button">&nbsp;</div>
-      <div class="dhx_cal_today_button"></div>
-      <div class="dhx_cal_date"></div>
-      <div class="dhx_cal_tab" name="day_tab"></div>
-      <div class="dhx_cal_tab" name="week_tab"></div>
-      <div class="dhx_cal_tab" name="month_tab"></div>
-    </div>
-    <div class="dhx_cal_header"></div>
-    <div class="dhx_cal_data"></div>
+<<<<<<< HEAD=======<div id="invite-form">
+  <h1>Please select the user you want to invite:</h1>
+  <form action="/invite" method="POST">
+    <select name="event">
+      {{#each events}}
+      <option value="{{this._id}}">{{this.text}}</option>
+      {{/each}}
+    </select>
+    <input type="email" name="email" placeholder="Email" />
+    <button id="invite-button" type="submit">Invite</button>
+  </form>
   </div>
+  >>>>>>> 63974dae66b77ae67dd2055f144ccc62d0486297
 
-  <script src="/javascripts/script"></script>
-  <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js"></script>
+  <body onload="start();">
+    <div id="scheduler_here" class="dhx_cal_container" style="width: 80%; height: 60%; margin: 0 auto;">
+      <div class="dhx_cal_navline">
+        <div class="dhx_cal_prev_button">&nbsp;</div>
+        <div class="dhx_cal_next_button">&nbsp;</div>
+        <div class="dhx_cal_today_button"></div>
+        <div class="dhx_cal_date"></div>
+        <div class="dhx_cal_tab" name="day_tab"></div>
+        <div class="dhx_cal_tab" name="week_tab"></div>
+        <div class="dhx_cal_tab" name="month_tab"></div>
+      </div>
+      <div class="dhx_cal_header"></div>
+      <div class="dhx_cal_data"></div>
+    </div>
+
+    <script src="/javascripts/script"></script>
+    <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js"></script>
