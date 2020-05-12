@@ -249,3 +249,9 @@ body {
   border-radius: 50%;
   border: 5px solid black;
 }
+
+#logo {
+  width: 95px;
+  height: auto;
+  margin-top: 5px;
+}
