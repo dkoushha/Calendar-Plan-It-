@@ -1,4 +1,57 @@
 <link rel="stylesheet" href="/stylesheets/signupForm.css">
+<style>
+    .select-dropdown {
+        position: relative;
+        background-color: #f2a51a;
+        width: auto;
+        float: left;
+        max-width: 100%;
+        border-radius: 10px;
+    }
+
+    .select-dropdown select {
+        font-family: "helvetica neue", helvetica;
+        font-size: .8rem;
+        font-weight: 200;
+        max-width: 100%;
+        min-width: 30px;
+        padding: 8px 24px 8px 10px;
+        border: none;
+        background-color: #f2a51a;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 10px;
+    }
+
+    .select-dropdown select:active,
+    .select-dropdown select:focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+    .select-dropdown:after {
+        content: " ";
+        position: absolute;
+        top: 50%;
+        margin-top: -2px;
+        right: 8px;
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid #aaa;
+    }
+
+    option:hover {
+        background: red !important;
+    }
+
+    .select-dropdown {
+        margin-bottom: 10px;
+
+    }
+</style>
 
 <nav id="navbar">
     <div class="container">
@@ -13,32 +66,36 @@
 </nav>
 
 <div class="body-container">
-
     <div class="container-signupForm" id="container">
         <div class="form-container sign-up-container">
             <form action="/reminder" method="POST">
                 <h1>Set a reminder</h1>
-                <select name="events">
-                    {{#each events}}
-                    <option value="{{this._id}}">{{this.text}}</option>
-                    {{/each}}
-                </select>
-                <select name="alertOption">
-                    <option value="days">Alert 2 days before</option>
-                    <option value="day">Alert 1 day before</option>
-                    <option value="hour">Alert 6 hours before</option>
-                </select>
+                <div class="select-dropdown">
+                    <select class="select" name="events">
+                        {{#each events}}
+                        <option value="{{this._id}}">{{this.text}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="select-dropdown">
+                    <select class="select" name="alertOption">
+                        <option value="days" class="option">Alert 2 days before</option>
+                        <option value="day">Alert 1 day before</option>
+                        <option value="hour">Alert 6 hours before</option>
+                    </select></div>
                 <button type="submit">Done</button>
             </form>
         </div>
         <div class="form-container sign-in-container">
             <form action="/invite" method="POST">
                 <h1>Invite</h1>
-                <select name="event">
-                    {{#each events}}
-                    <option value="{{this._id}}">{{this.text}}</option>
-                    {{/each}}
-                </select>
+                <div class="select-dropdown">
+                    <select name="event">
+                        {{#each events}}
+                        <option value="{{this._id}}">{{this.text}}</option>
+                        {{/each}}
+                    </select>
+                </div>
                 <div>
                     <input type="email" name="email" placeholder="Email" />
                 </div>
