@@ -97,6 +97,8 @@ router.post("/data", (req, res) => {
 //find out time zone
 //for the user from ip
 router.get("/personalAccount", checkVerifiedUser, (req, res) => {
+  let timezone = moment.tz.names()
+  console.log(timezone);
   let userEmail = (req.user.email).split("@")
   let userName = userEmail[0]
   axios.get("http://ip-api.com/json").then((response) => {

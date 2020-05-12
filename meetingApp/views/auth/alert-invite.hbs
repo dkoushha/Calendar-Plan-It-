@@ -2,11 +2,10 @@
 <style>
     .select-dropdown {
         position: relative;
-        background-color: #f2a51a;
+        background-color: #eee;
         width: auto;
         float: left;
         max-width: 100%;
-        border-radius: 10px;
     }
 
     .select-dropdown select {
@@ -15,18 +14,17 @@
         font-weight: 200;
         max-width: 100%;
         min-width: 30px;
-        padding: 8px 24px 8px 10px;
+        padding: 12px 15px;
         border: none;
-        background-color: #f2a51a;
+        background-color: #eee;
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
-        border-radius: 10px;
     }
 
     .select-dropdown select:active,
     .select-dropdown select:focus {
-        outline: none;
+        outline: #00adb5;
         box-shadow: none;
     }
 
@@ -43,13 +41,11 @@
         border-top: 5px solid #aaa;
     }
 
-    option:hover {
-        background: red !important;
-    }
+
 
     .select-dropdown {
         margin-bottom: 10px;
-
+        margin-top: 10px
     }
 </style>
 
@@ -79,7 +75,7 @@
                 </div>
                 <div class="select-dropdown">
                     <select class="select" name="alertOption">
-                        <option value="days" class="option">Alert 2 days before</option>
+                        <option value="days" id="option">Alert 2 days before</option>
                         <option value="day">Alert 1 day before</option>
                         <option value="hour">Alert 6 hours before</option>
                     </select></div>
@@ -126,7 +122,7 @@
 <script>
     let count = 0;
     let max = 4;
-    let topPosition = 70;
+    let topPosition = 75;
     function addInputField() {
         count += 1;
         topPosition += 5;
@@ -143,4 +139,5 @@
             document.getElementById("create-input").style.top = topPosition + "%";
         }
     }
+
 </script>

@@ -14,10 +14,6 @@ router.get("/invite", (req, res) => {
 
 
 router.post("/reminder", (req, res) => {
-    console.log("what i need to see", req.body);
-    console.log("events", req.body.events);
-    console.log("alertOption", req.body.alertOption);
-
     Event.findOne({
         _id: req.body.events
     }).then((event) => {

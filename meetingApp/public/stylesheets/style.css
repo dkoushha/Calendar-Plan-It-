@@ -71,12 +71,12 @@ svg.letter__svg--away {
     opacity: 1;
   }
 
-  90% {
+  70% {
     transform: translateX(-14rem);
     opacity: 0;
   }
 
-  95% {
+  99% {
     transform: translateX(-1rem);
     opacity: 0;
   }
@@ -178,6 +178,17 @@ body {
 
 .dhx_cal_navline {
   background: linear-gradient(to left, #434e5f, #00adb5);
+  color: white;
+}
+
+.dhx_cal_today_button,
+.dhx_cal_tab {
+  color: white;
+}
+
+.dhx_cal_date {
+  color: white;
+  ;
 }
 
 /* personal account css */
@@ -246,6 +257,15 @@ body {
   height: 100px;
   width: auto;
   margin-bottom: 5px;
-  border-radius: 50%;
-  border: 5px solid black;
+  border-radius: 10%;
+  border: 1px solid black;
+}
+
+.date {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
 }
