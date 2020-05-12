@@ -27,14 +27,24 @@ router.get("/data", (req, res) => {
       e.start_date = localTime;
     });
     console.log("Data", dataToSend);
-    console.log("User ID", req.user.id);
-    dataToSend.forEach((e) => {
-      console.log("Event user ID", e._userId);
+    dataToSend.forEach((e)=>{
       if (e._userId == req.user.id) {
-        console.log("Element", e);
+        console.log("Element", e.attendList.length);
         dataToClientSide.push(e);
       }
+      if(e.attendList.length>1){
+        console.log('Attend list bigger than 1');
+        dataToClientSide.push(e)
+      }
     });
+    console.log("User ID", req.user.id);
+    // dataToSend.forEach((e) => {
+    //   console.log("Event user ID", e._userId);
+    //   if (e._userId == req.user.id) {
+    //     console.log("Element", e);
+    //     dataToClientSide.push(e);
+    //   }
+    // });
     res.send(dataToClientSide);
   });
 });

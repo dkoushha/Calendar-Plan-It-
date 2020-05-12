@@ -61,20 +61,21 @@ function start() {
 }
 
 // Add new input field when button pressed
-
+let count = 0;
+let max = 5;
 function addInputField() {
-  let input = document.createElement("input");
-  let br = document.createElement("br");
-  input.setAttribute("type", "email");
-  input.setAttribute("name", "email");
-  input.setAttribute("placeholder", "Email");
-  document.querySelectorAll(".invite-form div")[0].appendChild(input);
-  document.querySelectorAll(".invite-form div")[0].appendChild(br);
+  if (count < max) {
+    count +=1;
+    let input = document.createElement("input");
+    let br = document.createElement("br");
+    input.setAttribute("type", "email");
+    input.setAttribute("name", "email");
+    input.setAttribute("placeholder", "Email");
+    document.querySelectorAll(".invite-form div")[0].appendChild(input);
+    document.querySelectorAll(".invite-form div")[0].appendChild(br);
+  }
 }
-function refresh() {
-  window.location.reload();
-  document.getElementById('hidden').classList.remove('hidden');
-}
+
 // function removeInputField(){
 //     let inputField=document.querySelectorAll('.invite-form div')[0];
 //     inputField.removeChild(inputField.lastChild)
