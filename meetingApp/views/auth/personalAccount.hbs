@@ -20,22 +20,24 @@
     <form action="/upload-profile-img" method="post" enctype="multipart/form-data">
       <input type="file" name="user-img" id="myFile">
       <label for="myFile" id="upload-file-label">Choose profile picture</label>
-      <button type="submit" class="img-button">Upload</button>
+      <div id="upload-deleteProfileImg">
+        <button type="submit" class="img-button">Upload</button>
     </form>
     <form action="/delete-profile-img" method="POST">
-      <button class="img-button img-button-top" type="submit">Delete profile picture</button>
-    </form>
-  </section>
-  <p id="welcome-margin-top">Welcome to {{userName}}</p>
-  <p>Country Name: {{zone.countryName}}</p>
-  <p>Zone Name: {{zone.zoneName}}</p>
+      <button class="img-button img-button-top" type="submit">Delete</button>
+</div>
+</form>
+</section>
+<p id="welcome-margin-top">Welcome to {{userName}}</p>
+<p>Country Name: {{zone.countryName}}</p>
+<p>Zone Name: {{zone.zoneName}}</p>
 
-  <br>
-  <a id="invite-button" href="/invite">Invite and Reminder</a>
-  <div class="date">
-    <p id="date"></p>
-    <div id="txt"></div>
-  </div>
+<br>
+<a id="invite-button" href="/invite">Invite and Reminder</a>
+<div class="date">
+  <p id="date"></p>
+  <div id="txt"></div>
+</div>
 </div>
 
 

@@ -1,58 +1,13 @@
 <link rel="stylesheet" href="/stylesheets/signupForm.css">
-<style>
-    .select-dropdown {
-        position: relative;
-        background-color: #e6e6e6;
-        width: auto;
-        float: left;
-        max-width: 100%;
-        border-radius: 2px;
-    }
+<link rel="stylesheet" href="/stylesheets/style.css">
 
-    .select-dropdown select {
-        font-family: "helvetica neue", helvetica;
-        font-size: 1rem;
-        font-weight: 200;
-        max-width: 100%;
-        padding: 8px 24px 8px 10px;
-        border: none;
-        background-color: transparent;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-    }
-
-    .select-dropdown select:active,
-    .select-dropdown select:focus {
-        outline: none;
-        box-shadow: none;
-    }
-
-    .select-dropdown:after {
-        content: " ";
-        position: absolute;
-        top: 50%;
-        margin-top: -2px;
-        right: 8px;
-        width: 0;
-        height: 0;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 5px solid #aaa;
-    }
-
-
-    .select-dropdown {
-        margin-bottom: 10px;
-        margin-top: 10px
-    }
-</style>
 
 <nav id="navbar">
     <div class="container">
         <!-- Clicking on a logo usually brings the user back to the homepage -->
-        <h1 class="logo"><a href="personalAccount.hbs">Plan-IT</a></h1>
+        <a href="personalAccount"><img id="logo" src="images/logo.png" alt="logo"></a>
         <ul>
+            <li><a href="personalAccount">Home</a></li>
             <li><a href="about">About</a></li>
             <li><a href="logout">Logout</a></li>
 
@@ -65,6 +20,8 @@
         <div class="form-container sign-up-container">
             <form action="/reminder" method="POST">
                 <h1>Set a reminder</h1>
+                <h5>choose an event</h5>
+
                 <div class="select-dropdown">
                     <select class="select" name="events">
                         {{#each events}}
@@ -72,6 +29,7 @@
                         {{/each}}
                     </select>
                 </div>
+
                 <div class="select-dropdown">
                     <select class="select" name="alertOption">
                         <option value="days" id="option">Alert 2 days before</option>
@@ -84,6 +42,8 @@
         <div class="form-container sign-in-container">
             <form action="/invite" method="POST">
                 <h1>Invite</h1>
+                <h5>choose an event</h5>
+
                 <div class="select-dropdown">
                     <select class="select" name="event">
                         {{#each events}}
@@ -106,9 +66,9 @@
                     <button class="ghost" id="signIn">Invite</button>
                 </div>
                 <div class="overlay-panel overlay-right">
-                    <h1>Alert</h1>
+                    <h1>Reminder</h1>
                     <p>choose an event</p>
-                    <button class="ghost" id="signUp">Alert</button>
+                    <button class="ghost" id="signUp">Reminder</button>
                 </div>
             </div>
         </div>
@@ -119,7 +79,7 @@
 <script src="/javascripts/signupForm.js"></script>
 <script>
     let count = 0;
-    let max = 4;
+    let max = 3;
     let topPosition = 75;
     function addInputField() {
         count += 1;
