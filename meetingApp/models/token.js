@@ -21,6 +21,9 @@ const tokenSchema = new Schema({
         required: true,
         ref: 'User'
     },
+    invitedUserEmail: {
+        type: String
+    },
     createdAt: {
         type: Date,
         required: true,
