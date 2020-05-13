@@ -48,6 +48,7 @@ router.get("/invite", (req, res) => {
 router.post("/invite", (req, res) => {
     let userEmail = (req.user.email).split("@");
     let userName = userEmail[0];
+    let invitedUserEmail;
     console.log("req.body", req.body.email);
     User.find({
             email: req.body.email
@@ -56,6 +57,7 @@ router.post("/invite", (req, res) => {
             console.log("users", users);
             users.forEach((user) => {
                 console.log("outPut: user", user)
+                invitedUserEmail = user.email
                 const token = new Token({
                     _eventId: req.body.event,
                     _userId: req.user.id,
@@ -74,7 +76,7 @@ router.post("/invite", (req, res) => {
                     let eventEnd = moment.utc(event.end_date).local().format("LLLL");
                     const mailOptions = {
                         from: "ourmeetingapp@gmail.com",
-                        to: req.body.email,
+                        to: invitedUserEmail,
                         subject: "Invitation Token",
                         html: `<p>Hi there,<br>You've been invited by <b>${userName}</b> to an event<b> ${newTextarea[0]} on ${eventStart} to ${eventEnd}</b><br>
                 To accept this invitation, simply click below.</p><br>
