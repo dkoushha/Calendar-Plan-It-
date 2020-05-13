@@ -52,11 +52,7 @@ router.post("/invite", (req, res) => {
             email: req.body.email
         })
         .then((users) => {
-            console.log("users", users);
             users.forEach((user) => {
-                console.log("outPut: user", user)
-                invitedUserEmail = user.email
-                console.log("outPut: invitedUserEmail", invitedUserEmail)
                 const token = new Token({
                     _eventId: req.body.event,
                     _userId: req.user.id,
@@ -66,10 +62,8 @@ router.post("/invite", (req, res) => {
                 Promise.all([token.save(), Event.findOne({
                     _id: req.body.event
                 })]).then((response) => {
-                    console.log("array", response);
                     let token = response[0];
                     let event = response[1];
-                    console.log("outPut: event", event)
                     let newTextarea = event.text.split("&")
                     let eventStart = moment.utc(event.start_date).local().format("LLLL");
                     let eventEnd = moment.utc(event.end_date).local().format("LLLL");
