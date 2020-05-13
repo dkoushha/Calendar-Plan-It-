@@ -68,7 +68,11 @@ router.post("/signup", signUpValidation, (req, res) => {
     to: user.email,
     subject: "Account Verification Token",
     // check why it's not working
-    html: `<a href= "http://${req.headers.host}/confirmations/${token.token}">verify your email</a>`
+    html: `<p>Hi there,<br></br>
+    To verify your email, simply click below.</p><br>
+    <a href= "http://${req.headers.host}/confirmations/${token.token}">verify your email</a><br>
+    <h4>Enjoy<br>
+    The Plan-It Team</h4>`
   };
   // render the res after signup
   transporter.sendMail(mailOptions, function (err) {
@@ -83,6 +87,7 @@ router.post("/signup", signUpValidation, (req, res) => {
     });
   });
 });
+
 
 //render personalAccount after email verification
 router.get("/confirmations/:token", (req, res) => {

@@ -33,7 +33,11 @@ router.get("/invite", (req, res) => {
                 dataToClientSide.push(e);
             }
         });
-        console.log("Data to clint side", dataToClientSide);
+        dataToClientSide.map((event) => {
+            let eventText = event.text.split("&");
+            event.text = eventText[0]
+            return event.text
+        })
     });
     res.render("auth/alert-invite", {
         events: dataToClientSide
@@ -44,49 +48,52 @@ router.get("/invite", (req, res) => {
 router.post("/invite", (req, res) => {
     let userEmail = (req.user.email).split("@");
     let userName = userEmail[0];
-    let usersIdArr = []
     console.log("req.body", req.body.email);
     User.find({
             email: req.body.email
         })
         .then((users) => {
             console.log("users", users);
-            users.map((user) => usersIdArr.push(user._id))
-            const token = new Token({
-                _eventId: req.body.event,
-                _userId: req.user.id,
-                invitedUserId: usersIdArr,
-                token: randomToken(16),
-            });
-            return Promise.all([token.save(), Event.findOne({
-                _id: req.body.event
-            })])
-        }).then((response) => {
-            console.log("array", response);
-            let token = response[0];
-            let event = response[1];
-            let eventStart = moment.utc(event.start_date).local().format("LLLL");
-            let eventEnd = moment.utc(event.end_date).local().format("LLLL");
-            const mailOptions = {
-                from: "ourmeetingapp@gmail.com",
-                to: req.body.email,
-                subject: "Invitation Token",
-                html: `<p>Hi there,<br>You've been invited by <b>${userName}</b> to an event<b> ${event.text} on ${eventStart} to ${eventEnd}</b><br>
+            users.forEach((user) => {
+                console.log("outPut: user", user)
+                const token = new Token({
+                    _eventId: req.body.event,
+                    _userId: req.user.id,
+                    invitedUserId: user._id,
+                    token: randomToken(16),
+                });
+                return Promise.all([token.save(), Event.findOne({
+                    _id: req.body.event
+                })]).then((response) => {
+                    console.log("array", response);
+                    let token = response[0];
+                    let event = response[1];
+                    console.log("outPut: event", event)
+                    let newTextarea = event.text.split("&")
+                    let eventStart = moment.utc(event.start_date).local().format("LLLL");
+                    let eventEnd = moment.utc(event.end_date).local().format("LLLL");
+                    const mailOptions = {
+                        from: "ourmeetingapp@gmail.com",
+                        to: req.body.email,
+                        subject: "Invitation Token",
+                        html: `<p>Hi there,<br>You've been invited by <b>${userName}</b> to an event<b> ${newTextarea[0]} on ${eventStart} to ${eventEnd}</b><br>
                 To accept this invitation, simply click below.</p><br>
                 <a href= "http://${req.headers.host}/invitationConfirmation/${token.token}"><b>I accept</b><a><br>
-                <h6>Enjoy<br>
-                The Plan-It Team</h6>
+                <h4>Enjoy<br>
+                The Plan-It Team</h4>
                 `
-            };
-            transporter.sendMail(mailOptions, function (err) {
-                if (err) {
-                    return res.send({
-                        msg: err.message,
+                    };
+                    transporter.sendMail(mailOptions, function (err) {
+                        if (err) {
+                            return res.send({
+                                msg: err.message,
+                            });
+                        }
                     });
-                }
-                res.render("auth/invitationConfirmation", {
-                    inviteEmail: req.body.email,
                 });
+            });
+            res.render("auth/invitationConfirmation", {
+                inviteEmail: req.body.email,
             });
         });
 });
@@ -100,11 +107,9 @@ router.get("/invitationConfirmation/:token", (req, res) => {
         .then((token) => {
             console.log("This is the token", token);
             let inviteInfoAndEventInfo = [];
-            // token.forEach((e) => {
             console.log("Invited User:", token.invitedUserId);
             inviteInfoAndEventInfo.push(token.invitedUserId);
             inviteInfoAndEventInfo.push(token._eventId);
-            // });
             console.log("Invited user and Event", inviteInfoAndEventInfo);
 
             return Event.findOneAndUpdate({
@@ -116,7 +121,8 @@ router.get("/invitationConfirmation/:token", (req, res) => {
             }, {
                 new: true
             })
-        }).then(() => {
+        }).then((event) => {
+            console.log("return event", event.attendList);
             res.redirect("/");
         })
 });

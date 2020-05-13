@@ -24,16 +24,12 @@ const transporter = nodemailer.createTransport({
 //     Event.find()
 //         .populate("attendList")
 //         .then((events) => {
-//             console.log("event", events);
 //             events.forEach((e) => {
-//                 console.log("e", e);
 //                 let reminderDate = moment.utc(e.remindTime).seconds(0).milliseconds(0);
-//                 console.log("outPut: date", reminderDate);
 //                 let dateToCompare = moment
 //                     .utc(new Date)
 //                     .seconds(0)
 //                     .milliseconds(0);
-//                 console.log("outPut: dateToCompareWithout", dateToCompare);
 //                 if (
 //                     (reminderDate.isSame(dateToCompare, "second") ||
 //                         reminderDate.isBefore(dateToCompare, "second")) &&
@@ -41,9 +37,7 @@ const transporter = nodemailer.createTransport({
 //                 ) {
 //                     let userEmails = e.attendList.map(e => e.email)
 //                     let mailList = userEmails.toString()
-//                     console.log("outPut: mailList", mailList)
 //                     e.sentReminder = true;
-//                     console.log("event remind", e.sentReminder);
 //                     let eventDate = moment.utc(e.start_date).local().format("LLLL");
 //                     let mailOptions = {
 //                         from: "ourmeetingapp@gmail.com",

@@ -97,8 +97,6 @@ router.get("/personalAccount", checkVerifiedUser, (req, res) => {
   axios
     .get("http://ip-api.com/json")
     .then((response) => {
-      console.log("Latitude: ", response.data.lat);
-      console.log("Longitude", response.data.lon);
       let userLat = response.data.lat;
       let userLon = response.data.lon;
       //API Key:EUU8LOIMTSKG
@@ -110,7 +108,6 @@ router.get("/personalAccount", checkVerifiedUser, (req, res) => {
       );
     })
     .then((response) => {
-      console.log("req.user", req.user);
       res.render("auth/personalAccount", {
         user: req.user,
         zone: response.data,

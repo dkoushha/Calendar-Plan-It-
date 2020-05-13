@@ -17,7 +17,7 @@ const tokenSchema = new Schema({
         required: true
     },
     invitedUserId: {
-        type: Array
+        type: String
     },
     createdAt: {
         type: Date,
