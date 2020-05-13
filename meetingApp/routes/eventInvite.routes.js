@@ -103,15 +103,30 @@ router.get("/invitationConfirmation/:token", (req, res) => {
     console.log(req.params.token);
     Token.findOne({
             token: req.params.token
-        })
+        }).populate("_userId").populate("invitedUserId").populate("_eventId")
         .then((token) => {
             console.log("This is the token", token);
-            let inviteInfoAndEventInfo = [];
-            console.log("Invited User:", token.invitedUserId);
-            inviteInfoAndEventInfo.push(token.invitedUserId);
-            inviteInfoAndEventInfo.push(token._eventId);
-            console.log("Invited user and Event", inviteInfoAndEventInfo);
-
+            console.log("user email", token._userId.email);
+            let invitedUserEmail = (token.invitedUserId.email).split("@");
+            let invitedUserName = invitedUserEmail[0];
+            let event = token._eventId.text;
+            let newTextarea = event.split("&")
+            const mailOptions = {
+                from: "ourmeetingapp@gmail.com",
+                to: token._userId.email,
+                subject: "Invitation Token",
+                html: `<p>Hi there, ${invitedUserName} has accepted your invitation for the ${newTextarea[0]} event .</p><br>
+        <h4>Enjoy<br>
+        The Plan-It Team</h4>
+        `
+            };
+            transporter.sendMail(mailOptions, function (err) {
+                if (err) {
+                    return res.send({
+                        msg: err.message,
+                    });
+                }
+            });
             return Event.findOneAndUpdate({
                 _id: token._eventId
             }, {
@@ -121,9 +136,10 @@ router.get("/invitationConfirmation/:token", (req, res) => {
             }, {
                 new: true
             })
-        }).then((event) => {
-            console.log("return event", event.attendList);
+        }).then(() => {
             res.redirect("/");
-        })
+        });
 });
+
+
 module.exports = router;
