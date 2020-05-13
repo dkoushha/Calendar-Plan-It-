@@ -86,23 +86,24 @@ router.post("/signup", signUpValidation, (req, res) => {
 
 //render personalAccount after email verification
 router.get("/confirmations/:token", (req, res) => {
+  console.log(req.params);
   Token.findOne({
       token: req.params.token,
     })
     .then((token) => {
+      console.log("outPut: token", token)
       return User.findOne({
         _id: token._userId,
       });
     })
     .then((user) => {
+      console.log("outPut: user", user)
       user.isVerified = true;
       return user.save();
     })
     .then((user) => {
       req.login(user, () =>
-        res.render("auth/personalAccount", {
-          user: user,
-        })
+        res.redirect("/personalAccount")
       );
     });
 });

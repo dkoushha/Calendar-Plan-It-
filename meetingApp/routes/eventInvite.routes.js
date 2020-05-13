@@ -44,28 +44,39 @@ router.get("/invite", (req, res) => {
 router.post("/invite", (req, res) => {
     let userEmail = (req.user.email).split("@");
     let userName = userEmail[0];
+    let usersIdArr = []
     console.log("req.body", req.body.email);
-    User.findOne({
+    User.find({
             email: req.body.email
         })
-        .then((user) => {
+        .then((users) => {
+            console.log("users", users);
+            users.map((user) => usersIdArr.push(user._id))
             const token = new Token({
                 _eventId: req.body.event,
                 _userId: req.user.id,
-                invitedUserId: user._id,
+                invitedUserId: usersIdArr,
                 token: randomToken(16),
             });
-
             return Promise.all([token.save(), Event.findOne({
                 _id: req.body.event
             })])
-        }).then((array) => {
-            console.log("array", array);
+        }).then((response) => {
+            console.log("array", response);
+            let token = response[0];
+            let event = response[1];
+            let eventStart = moment.utc(event.start_date).local().format("LLLL");
+            let eventEnd = moment.utc(event.end_date).local().format("LLLL");
             const mailOptions = {
                 from: "ourmeetingapp@gmail.com",
                 to: req.body.email,
                 subject: "Invitation Token",
-                html: `<h3>${userName} has sent you an invitation for an event on <a href= "http://${req.headers.host}/invitationConfirmation/${token.token}">verify your email</a>`
+                html: `<p>Hi there,<br>You've been invited by <b>${userName}</b> to an event<b> ${event.text} on ${eventStart} to ${eventEnd}</b><br>
+                To accept this invitation, simply click below.</p><br>
+                <a href= "http://${req.headers.host}/invitationConfirmation/${token.token}"><b>I accept</b><a><br>
+                <h6>Enjoy<br>
+                The Plan-It Team</h6>
+                `
             };
             transporter.sendMail(mailOptions, function (err) {
                 if (err) {
@@ -73,9 +84,8 @@ router.post("/invite", (req, res) => {
                         msg: err.message,
                     });
                 }
-                let inviteEmail = req.body.email;
                 res.render("auth/invitationConfirmation", {
-                    inviteEmail: inviteEmail,
+                    inviteEmail: req.body.email,
                 });
             });
         });

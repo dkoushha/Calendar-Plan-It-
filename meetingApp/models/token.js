@@ -7,7 +7,7 @@ const tokenSchema = new Schema({
         required: true,
         ref: 'User'
     },
-    _eventId:{
+    _eventId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'Event'
@@ -16,8 +16,8 @@ const tokenSchema = new Schema({
         type: String,
         required: true
     },
-    invitedUserId:{
-        type:String
+    invitedUserId: {
+        type: Array
     },
     createdAt: {
         type: Date,

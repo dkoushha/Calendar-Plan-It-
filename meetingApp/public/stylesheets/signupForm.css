@@ -93,6 +93,12 @@ input {
   width: 100%;
 }
 
+input:focus,
+input:active {
+  background-color: #eee;
+  outline: none;
+}
+
 .container-signupForm {
   background-color: #fff;
   border-radius: 10px;

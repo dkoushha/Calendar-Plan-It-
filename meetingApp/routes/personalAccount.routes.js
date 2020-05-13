@@ -11,10 +11,7 @@ const axios = require("axios");
 const nodemailer = require("nodemailer");
 const Token = require("../models/Token");
 const randomToken = require("random-token");
-const checkVerifiedUser = require("../helpers/middlewares").checkVerifiedUser
-
-
-
+const checkVerifiedUser = require("../helpers/middlewares").checkVerifiedUser;
 
 //fetch the data from database when loading the calender
 router.get("/data", (req, res) => {
@@ -92,16 +89,14 @@ router.post("/data", (req, res) => {
   } else res.send("Not supported operation");
 });
 
-
-
 //find out time zone
 //for the user from ip
 router.get("/personalAccount", checkVerifiedUser, (req, res) => {
-  let timezone = moment.tz.names()
-  console.log(timezone);
-  let userEmail = (req.user.email).split("@")
-  let userName = userEmail[0]
-  axios.get("http://ip-api.com/json").then((response) => {
+  let userEmail = req.user.email.split("@");
+  let userName = userEmail[0];
+  axios
+    .get("http://ip-api.com/json")
+    .then((response) => {
       console.log("Latitude: ", response.data.lat);
       console.log("Longitude", response.data.lon);
       let userLat = response.data.lat;
@@ -119,7 +114,7 @@ router.get("/personalAccount", checkVerifiedUser, (req, res) => {
       res.render("auth/personalAccount", {
         user: req.user,
         zone: response.data,
-        userName: userName
+        userName: userName,
       });
     });
 });
