@@ -13,75 +13,12 @@
   </div>
 </nav>
 
-
-
 <div class="emailConfirmation-container">
   <div class="flex-container">
     <h2>We sent the invitation email to {{inviteEmail}}</h2>
 
-    {{!-- <a href="https://icons8.com/icon/64300/send-mail"> <img id="image" src="/images/icons8-send-mail.png" alt=""></a> --}}
-    <svg class="letter__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 153.50432 106.71063" style="
-    --size: 250px;
-    height: var(--size);
-    width: var(--size);
-  ">
-      <title>Asset 1</title>
-      <rect class="letter" x="1.5" y="19.27171" width="128" height="85.93893" rx="3.91595" ry="3.91595"
-        style="fill:#fff;stroke:#3f2b2f;stroke-linecap:round;stroke-linejoin:round;stroke-width:3px" />
-      <path class="letter__right"
-        d="M76.39506,62.2412l49.061,39.69738a2.48241,2.48241,0,0,0,4.0439-1.9298V24.47362a2.48241,2.48241,0,0,0-4.0439-1.9298Z"
-        style="fill:#fff;stroke:#3f2b2f;stroke-linecap:round;stroke-linejoin:round;stroke-width:3px" />
-
-      <path class="letter__left"
-        d="M54.60488,62.2412l-49.061,39.69738A2.48241,2.48241,0,0,1,1.5,100.00877V24.47362a2.48241,2.48241,0,0,1,4.04389-1.9298Z"
-        style="fill:#fff;stroke:#3f2b2f;stroke-linecap:round;stroke-linejoin:round;stroke-width:3px" />
-
-      <path class="letter__bottom-flap"
-        d="M59.68322,58.86335,3.09191,101.51287a2.05591,2.05591,0,0,0,1.23737,3.69776H127.267a2.05591,2.05591,0,0,0,1.23737-3.69776L71.913,58.86335A10.16,10.16,0,0,0,59.68322,58.86335Z"
-        style="fill:#fff;stroke:#3f2b2f;stroke-linecap:round;stroke-linejoin:round;stroke-width:3px" />
-
-      <path class="letter__top-flap"
-        d="M59.68322,65.619,3.09191,22.96945a2.05591,2.05591,0,0,1,1.23737-3.69776H127.267a2.05591,2.05591,0,0,1,1.23737,3.69776L71.913,65.619A10.16,10.16,0,0,1,59.68322,65.619Z"
-        style="fill:#fff;stroke:#3f2b2f;stroke-linecap:round;stroke-linejoin:round;stroke-width:3px" />
-
-      <path class="letter__heart"
-        d="M148.62517,4.83318a11.46,11.46,0,0,0-16.16,0l-1.51,1.39-1.47-1.35a11.45,11.45,0,0,0-16.2,16.1l12.64,12.83a6.94,6.94,0,0,0,5,2.08h0a7,7,0,0,0,5-2.06l12.77-12.8A11.47,11.47,0,0,0,148.62517,4.83318Z"
-        style="fill:#ffdbd2;stroke-miterlimit:10;stroke-width:3px" />
-    </svg>
+    <a href="https://icons8.com/icon/64300/send-mail"> <img id="image" src="/images/icons8-send-mail.png" alt=""></a>
 
     <a href="/personalAccount" id="linkBackToAccount">Go back to your account</a>
   </div>
 </div>
-<script>
-  const parent = document.querySelector('.letter__heart').parentNode;
-  const letter = document.querySelector('.letter');
-  const letterTopFlap = document.querySelector('.letter__top-flap');
-  const heart = document.querySelector('.letter__heart');
-  const heartClone = heart.cloneNode();
-  const letterTopFlapAfter = document.querySelector('.letter__top-flap').nextElementSibling;
-  document.addEventListener('DOMContentLoaded', () => {
-    heart.classList.add('letter__heart--fly-up');
-    heartClone.classList.remove('letter__heart--fly-up');
-    heartClone.classList.add('letter__heart--fly-down');
-    window.setTimeout(() => {
-      letterTopFlap.classList.add('letter__top-flap--open');
-      // parent.insertBefore(heartClone, letterTopFlapAfter);
-      const letterTopFlapClone = letterTopFlap.cloneNode();
-
-      window.setTimeout(() => {
-        heart.remove();
-        parent.insertBefore(letterTopFlapClone, letter.nextSibling);
-        letterTopFlap.style.display = 'none';
-        parent.insertBefore(heartClone, letterTopFlapClone.nextSibling);
-        parent.classList.add('letter__svg--away');
-        window.setTimeout(() => {
-          letterTopFlap.style.display = 'block';
-          letterTopFlapClone.style.display = 'none';
-          window.setTimeout(() => {
-            letterTopFlap.classList.remove('letter__top-flap--open');
-          }, 10);
-        }, 400);
-      }, 400);
-    }, 200)
-  })
-</script>

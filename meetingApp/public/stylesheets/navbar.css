@@ -42,10 +42,7 @@ h1 {
   color: #fff;
   /* overflow ensures that the background shows no matter what */
   overflow: auto;
-  position: fixed;
-  top: 0;
-  z-index: 1;
-  width: 100%;
+
 
 }
 
