@@ -24,26 +24,28 @@ let transporter = nodemailer.createTransport({
 
 router.get("/invite", (req, res) => {
     console.log(req.user);
-    let dataToClientSide = [];
+    let inviteList = [];
+    let alarmList = []
     Event.find().then((dataToSend) => {
         //console.log('Data',dataToSend);
         dataToSend.forEach((e) => {
             //console.log(e._userId);
             if (e._userId == req.user.id) {
-                dataToClientSide.push(e);
+                inviteList.push(e);
+            };
+            if (e.attendList.includes(req.user.id)) {
+                alarmList.push(e);
             }
         });
-        dataToClientSide.map((event) => {
-            let eventText = event.text.split("&");
-            event.text = eventText[0]
-            return event.text
-        })
+        console.log("outPut: inviteList", inviteList)
+        console.log("outPut: alarmList", alarmList)
+        res.render("auth/alert-invite", {
+            inviteList: inviteList,
+            alarmList: alarmList
+        });
     });
-    res.render("auth/alert-invite", {
-        events: dataToClientSide
-    });
-    //res.render('auth/invite')
-});
+})
+
 
 router.post("/invite", (req, res) => {
     let userName = (req.user.email).split("@");

@@ -24,7 +24,7 @@
 
                 <div class="select-dropdown">
                     <select class="select" name="events">
-                        {{#each events}}
+                        {{#each alarmList}}
                         <option value="{{this._id}}">{{this.text}}</option>
                         {{/each}}
                     </select>
@@ -46,7 +46,7 @@
 
                 <div class="select-dropdown">
                     <select class="select" name="event">
-                        {{#each events}}
+                        {{#each inviteList}}
                         <option value="{{this._id}}">{{this.text}}</option>
                         {{/each}}
                     </select>
