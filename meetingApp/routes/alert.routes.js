@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 // Require user model
-const User = require("../models/User.model");
+const User = require("../models/user.model");
 //require event model
 const Event = require("../models/Events.model");
 

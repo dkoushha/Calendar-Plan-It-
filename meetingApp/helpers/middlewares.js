@@ -1,7 +1,7 @@
 const {
   check
 } = require("express-validator");
-const User = require("../models/User.model");
+const User = require("../models/user.model");
 
 let signUpValidation = [
   check("email")

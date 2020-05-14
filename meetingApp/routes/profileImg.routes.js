@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 // Require user model
-const User = require("../models/User.model");
+const User = require("../models/user.model");
 const cloudinary = require("cloudinary");
 const cloudinaryStorage = require("multer-storage-cloudinary");
 // package to allow <input type="file"> in forms
