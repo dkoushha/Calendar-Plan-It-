@@ -3,13 +3,13 @@ const router = express.Router();
 // Require user model
 const User = require("../models/User.model");
 //require event model
-const Event = require("../models/Events");
+const Event = require("../models/Events.model");
 // require moment.js
 const momentTimezone = require("moment-timezone");
 const moment = require("moment");
 const axios = require("axios");
 const nodemailer = require("nodemailer");
-const Token = require("../models/Token");
+const Token = require("../models/Token.model");
 const randomToken = require("random-token");
 const checkVerifiedUser = require("../helpers/middlewares").checkVerifiedUser;
 
@@ -53,27 +53,39 @@ router.post("/data", (req, res) => {
       tid: String(tid),
     });
   }
+
   // edit an event
   if (mode == "updated") {
-    Event.findOneAndUpdate({
-        id: req.body.id,
-      }, {
-        text: req.body.text,
-        start_date: req.body.start_date,
-        end_date: req.body.end_date,
-        sentReminder: false,
-      }, {
-        new: true,
-      },
-      update_response
-    );
+    Event.findOne({
+      id: req.body.id
+    }).then((event) => {
+      if ((req.user.id).localeCompare(event._userId) === 0) {
+        event.text = req.body.text
+        event.start_date = req.body.start_date
+        event.end_date = req.body.end_date
+        event.sentReminder = false
+        event.save();
+        update_response();
+      } else {
+        mode = "error";
+        update_response();
+      }
+    });
     // delete an event
   } else if (mode == "deleted") {
-    Event.findOneAndDelete({
-        id: req.body.id,
-      },
-      update_response
-    );
+    Event.findOne({
+      id: req.body.id,
+    }).then((event) => {
+      if ((req.user.id).localeCompare(event._userId) === 0) {
+        event.delete();
+        update_response();
+      } else {
+        event.attendList.pull(
+          (req.user.id)
+        ), event.save();
+        update_response();
+      }
+    });
     // add a new event
   } else if (mode == "inserted") {
     let event = new Event({

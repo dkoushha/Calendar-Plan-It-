@@ -3,13 +3,13 @@ const router = express.Router();
 // Require user model
 const User = require("../models/User.model");
 //require event model
-const Event = require("../models/Events");
+const Event = require("../models/Events.model");
 // require moment.js
 const momentTimezone = require("moment-timezone");
 const moment = require("moment");
 const axios = require("axios");
 const nodemailer = require("nodemailer");
-const Token = require("../models/Token");
+const Token = require("../models/Token.model");
 const randomToken = require("random-token");
 
 
@@ -100,6 +100,7 @@ router.get("/invitationConfirmation/:token", (req, res) => {
         }).populate("_userId").populate("invitedUserId").populate("_eventId")
         .then((token) => {
             let invitedUserName = (token.invitedUserId.email).split("@");
+            console.log("outPut: invitedUserName", invitedUserName)
             let newTextarea = (token._eventId.text).split("&");
             const mailOptions = {
                 from: "ourmeetingapp@gmail.com",

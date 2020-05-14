@@ -22,13 +22,10 @@ const eventSchema = new Schema({
   id: {
     type: String
   },
-  sentReminder: {
-    type: Boolean,
-    default: false
-  },
-  remindTime: {
-    type: Date
-  }
+  remind: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Alarm"
+  }]
 });
 
 

@@ -3,7 +3,7 @@ const router = express.Router();
 // Require user model
 const User = require("../models/User.model");
 //require event model
-const Event = require("../models/Events");
+const Event = require("../models/Events.model");
 // require moment.js
 const momentTimezone = require("moment-timezone");
 const moment = require("moment");
