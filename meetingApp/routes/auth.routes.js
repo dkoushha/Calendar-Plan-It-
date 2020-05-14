@@ -54,39 +54,43 @@ router.post("/signup", signUpValidation, (req, res) => {
     password: hashPass,
     image: `https://api.adorable.io/avatars/59/${req.body.email}`,
   });
-  user.save();
-  // create new token for the user to verify its email 
-  const token = new Token({
-    _userId: user._id,
-    _eventId: user._id,
-    token: randomToken(16),
-  });
-  token.save();
-  // send a verification email
-  const mailOptions = {
-    from: "ourmeetingapp@gmail.com",
-    to: user.email,
-    subject: "Account Verification Token",
-    // check why it's not working
-    html: `<p>Hi there,<br></br>
+  return user.save().then((user) => {
+    // create new token for the user to verify its email 
+    const token = new Token({
+      _userId: user._id,
+      _eventId: user._id,
+      invitedUserId: user._id,
+      token: randomToken(16),
+    });
+    return token.save()
+  }).then((token) => {
+    console.log("outPut: token", token)
+    // send a verification email
+    const mailOptions = {
+      from: "ourmeetingapp@gmail.com",
+      to: req.body.email,
+      subject: "Account Verification Token",
+      // check why it's not working
+      html: `<p>Hi there,<br></br>
     To verify your email, simply click below.</p><br>
     <a href= "http://${req.headers.host}/confirmations/${token.token}">verify your email</a><br>
     <h4>Enjoy<br>
     The Plan-It Team</h4>`
-  };
-  // render the res after signup
-  transporter.sendMail(mailOptions, function (err) {
-    if (err) {
-      return res.send({
-        msg: err.message,
+    };
+    // render the res after signup
+    transporter.sendMail(mailOptions, function (err) {
+      if (err) {
+        return res.send({
+          msg: err.message,
+        });
+      }
+      let userEmail = req.body.email
+      res.render("auth/emailConfirmation", {
+        userEmail: userEmail
       });
-    }
-    let userEmail = req.body.email
-    res.render("auth/emailConfirmation", {
-      userEmail: userEmail
     });
   });
-});
+})
 
 
 //render personalAccount after email verification
@@ -96,13 +100,10 @@ router.get("/confirmations/:token", (req, res) => {
       token: req.params.token,
     })
     .then((token) => {
-      console.log("outPut: token", token)
       return User.findOne({
-        _id: token._userId,
-      });
-    })
-    .then((user) => {
-      console.log("outPut: user", user)
+        _id: token._userId
+      })
+    }).then((user) => {
       user.isVerified = true;
       return user.save();
     })
