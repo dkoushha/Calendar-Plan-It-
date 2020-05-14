@@ -71,7 +71,7 @@ router.post("/signup", signUpValidation, (req, res) => {
       // check why it's not working
       html: `<p>Hi there,<br></br>
     To verify your email, simply click below.</p><br>
-    <a href= "http://${req.headers.host}/confirmations/${token.token}">verify your email</a><br>
+    <a href= "${process.env.EMAIL_HOST}confirmations/${token.token}">verify your email</a><br>
     <h4>Enjoy<br>
     The Plan-It Team</h4>`
     };

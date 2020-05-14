@@ -75,7 +75,7 @@ router.post("/invite", (req, res) => {
                         subject: "Invitation",
                         html: `<p>Hi there,<br>You've been invited by <b>${userName[0]}</b> to an event<b> ${newTextarea[0]} on ${eventStart} to ${eventEnd}</b><br>
                 To accept this invitation, simply click below.</p><br>
-                <a href= "http://${req.headers.host}/invitationConfirmation/${token.token}"><b>I accept</b><a><br>
+                <a href= "${process.env.EMAIL_HOST}invitationConfirmation/${token.token}"><b>I accept</b><a><br>
                 <h4>Enjoy<br>
                 The Plan-It Team</h4>
                 `
