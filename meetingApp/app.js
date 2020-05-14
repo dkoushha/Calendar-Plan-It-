@@ -25,7 +25,8 @@ const nodemailer = require("nodemailer");
 // Require user model
 // const User = require("../models/User.model");
 //require event model
-const Event = require("./models/Events");
+const Event = require("./models/Events.model");
+const Alarm = require("./models/alarm.model");
 const app = express();
 
 //mongoose

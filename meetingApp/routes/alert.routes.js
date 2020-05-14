@@ -4,6 +4,8 @@ const router = express.Router();
 const User = require("../models/User.model");
 //require event model
 const Event = require("../models/Events.model");
+
+const Alarm = require("../models/alarm.model");
 // require moment.js
 const momentTimezone = require("moment-timezone");
 const moment = require("moment");
@@ -14,34 +16,75 @@ router.get("/invite", (req, res) => {
 
 
 router.post("/reminder", (req, res) => {
-    Event.findOne({
+    Promise.all([Event.findOne({
         _id: req.body.events
-    }).then((event) => {
-        console.log("event", event.start_date);
-        let remindTime;
-        switch (req.body.alertOption) {
-            case "1-day":
-                console.log("day");
-                remindTime = moment(event.start_date).subtract(1, "day");
-                break;
-            case "6-hours":
-                console.log("hour");
-                remindTime = moment(event.start_date).subtract(6, "hour");
-                break;
-            case "2-days":
-                console.log("days");
-                remindTime = moment(event.start_date).subtract(2, "day")
-                break;
+    }), Alarm.findOne({
+            _userId: req.user.id,
+            _eventId: req.body.events
         }
-        event.remindTime = remindTime;
-        console.log("text", event.text);
-        console.log(typeof (event.text));
-        let newTextarea = event.text.split("&")
-        console.log("outPut: newTextarea", newTextarea[0])
-        event.text = `${newTextarea[0]} &#x23F0 ${req.body.alertOption} `
-        event.save()
-    }).then(() => {
-        res.redirect("/personalAccount")
+
+    )]).then((response) => {
+        console.log("response", response);
+        let event = response[0]
+        let alarmFound = response[1]
+        let remindTime;
+        if (!response[1]) {
+            console.log("event", event.start_date);
+            switch (req.body.alertOption) {
+                case "1-day":
+                    console.log("day");
+                    remindTime = moment(event.start_date).subtract(1, "day");
+                    break;
+                case "6-hours":
+                    console.log("hour");
+                    remindTime = moment(event.start_date).subtract(6, "hour");
+                    break;
+                case "2-days":
+                    console.log("days");
+                    remindTime = moment(event.start_date).subtract(2, "day")
+                    break;
+            }
+            const alarm = new Alarm({
+                _eventId: req.body.events,
+                _userId: req.user.id,
+                sentReminder: false,
+                remindTime: remindTime,
+                duration: req.body.alertOption,
+            });
+            return alarm.save()
+        } else {
+            console.log("event", event.start_date);
+            switch (req.body.alertOption) {
+                case "1-day":
+                    console.log("day");
+                    remindTime = moment(event.start_date).subtract(1, "day");
+                    break;
+                case "6-hours":
+                    console.log("hour");
+                    remindTime = moment(event.start_date).subtract(6, "hour");
+                    break;
+                case "2-days":
+                    console.log("days");
+                    remindTime = moment(event.start_date).subtract(2, "day")
+                    break;
+            }
+            alarmFound._eventId = req.body.events
+            alarmFound._userId = req.user.id
+            alarmFound.sentReminder = false
+            alarmFound.remindTime = remindTime
+            alarmFound.duration = req.body.alertOption
+
+
+            return alarmFound.save()
+        }
+    }).then((alarm) => {
+        return alarm.populate("_eventId").populate("_userId").execPopulate()
+    }).then((alarm) => {
+        console.log("alarm", alarm);
+        let eventDate = moment.utc(alarm._eventId.start_date).local().format("LLLL");
+        // let message = `An alarm has been set for a ${alarm._eventId.text} event on ${eventDate} befor ${alarm.duration}`
+        res.redirect("/invite")
+
     })
 });
 

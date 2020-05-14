@@ -3,7 +3,7 @@ const router = express.Router();
 // Require user model
 const User = require("../models/User.model");
 // Require token model
-const Token = require("../models/Token");
+const Token = require("../models/Token.model");
 const randomToken = require("random-token");
 // Add bcrypt to encrypt passwords
 const bcrypt = require("bcrypt");

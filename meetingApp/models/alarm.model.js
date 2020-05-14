@@ -17,6 +17,9 @@ const alarmSchema = new Schema({
     },
     remindTime: {
         type: Date
+    },
+    duration: {
+        type: String
     }
 });
 
