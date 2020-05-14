@@ -144,7 +144,7 @@ input:active {
 #create-input {
   position: absolute;
   top: 75%;
-  left: 23%;
+  left: 18%;
 }
 
 @keyframes show {

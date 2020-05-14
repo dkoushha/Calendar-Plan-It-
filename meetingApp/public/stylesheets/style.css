@@ -194,7 +194,7 @@ body {
 
 .select-dropdown select {
   font-family: "helvetica neue", helvetica;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 200;
   max-width: 100%;
   padding: 8px 24px 8px 10px;
@@ -203,6 +203,7 @@ body {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  min-width: 200px
 }
 
 .select-dropdown select:active,
@@ -250,4 +251,9 @@ footer {
 
 #footer-container a {
   padding: 10px;
+}
+
+.option {
+  font-size: 14px;
+  text-align: center;
 }

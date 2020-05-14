@@ -38,14 +38,12 @@ router.get("/", (req, res) => {
 // signup, signUpValidation in the helpers folder
 router.post("/signup", signUpValidation, (req, res) => {
   // get the validation errors 
-
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.render("auth/signupForm", {
       errors: errors.array(),
     });
   }
-
   // save new user 
   const salt = bcrypt.genSaltSync(bcryptSalt);
   const hashPass = bcrypt.hashSync(req.body.password, salt);

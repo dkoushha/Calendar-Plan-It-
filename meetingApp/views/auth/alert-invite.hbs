@@ -20,34 +20,36 @@
         <div class="form-container sign-up-container">
             <form action="/reminder" method="POST">
                 <h1>Set a Reminder</h1>
-                <h5>Choose an Event</h5>
+                <h4>Choose an Event</h4>
 
                 <div class="select-dropdown">
                     <select class="select" name="events">
                         {{#each alarmList}}
-                        <option value="{{this._id}}">{{this.text}}</option>
+                        <option class="option" value="{{this._id}}">{{this.text}}</option>
                         {{/each}}
                     </select>
                 </div>
+                <h4>Choose a time</h4>
 
                 <div class="select-dropdown">
                     <select class="select" name="alertOption">
-                        <option value="2-days" id="option">Alert 2 days before</option>
-                        <option value="1-day">Alert 1 day before</option>
-                        <option value="6-hours">Alert 6 hours before</option>
-                    </select></div>
+                        <option class="option" value="2-days" id="option">Alert 2 days before</option>
+                        <option class="option" value="1-day">Alert 1 day before</option>
+                        <option class="option" value="6-hours">Alert 6 hours before</option>
+                    </select>
+                </div>
                 <button type="submit">Done</button>
             </form>
         </div>
         <div class="form-container sign-in-container">
             <form action="/invite" method="POST">
                 <h1>Invite</h1>
-                <h5>Choose an event</h5>
+                <h4>Choose an event</h4>
 
                 <div class="select-dropdown">
                     <select class="select" name="event">
                         {{#each inviteList}}
-                        <option value="{{this._id}}">{{this.text}}</option>
+                        <option class="option" value="{{this._id}}">{{this.text}}</option>
                         {{/each}}
                     </select>
                 </div>
@@ -56,7 +58,7 @@
                 </div>
                 <button type="submit">Invite</button>
             </form>
-            <button id="create-input" onclick="addInputField()">Invite new user</button>
+            <button id="create-input" onclick="addInputField()">Add another invitee</button>
         </div>
         <div class="overlay-container">
             <div class="overlay">

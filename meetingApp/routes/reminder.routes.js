@@ -22,49 +22,49 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-cron.schedule("* * * * *", function () {
-    Alarm.find()
-        .populate("_userId").populate("_eventId")
-        .then((response) => {
-            console.log("response", response);
-            response.forEach((e) => {
-                let event = e._eventId;
-                let user = e._userId;
-                console.log("outPut: event", event)
-                console.log("outPut: user", user)
+// cron.schedule("* * * * *", function () {
+//     Alarm.find()
+//         .populate("_userId").populate("_eventId")
+//         .then((response) => {
+//             console.log("response", response);
+//             response.forEach((e) => {
+//                 let event = e._eventId;
+//                 let user = e._userId;
+//                 console.log("outPut: event", event)
+//                 console.log("outPut: user", user)
 
-                let reminderDate = moment.utc(e.remindTime).seconds(0).milliseconds(0);
-                let dateToCompare = moment
-                    .utc(new Date)
-                    .seconds(0)
-                    .milliseconds(0);
-                if (
-                    (reminderDate.isSame(dateToCompare, "second") ||
-                        reminderDate.isBefore(dateToCompare, "second")) &&
-                    !e.sentReminder
-                ) {
-                    let userEmail = user.email
-                    e.sentReminder = true;
-                    let eventDate = moment.utc(event.start_date).local().format("LLLL");
-                    let mailOptions = {
-                        from: "ourmeetingapp@gmail.com",
-                        to: userEmail,
-                        subject: `reminder email`,
-                        text: `Hi there, this email was automatically sent to you as 
-                        a reminder for the event name ${event.text} on ${eventDate}`
-                    };
-                    transporter.sendMail(mailOptions, function (error, info) {
-                        if (error) {
-                            console.log("error", error);
-                        } else {
-                            console.log("Email successfully sent!");
-                        }
-                    });
-                    e.save();
-                }
-            });
-        });
-});
+//                 let reminderDate = moment.utc(e.remindTime).seconds(0).milliseconds(0);
+//                 let dateToCompare = moment
+//                     .utc(new Date)
+//                     .seconds(0)
+//                     .milliseconds(0);
+//                 if (
+//                     (reminderDate.isSame(dateToCompare, "second") ||
+//                         reminderDate.isBefore(dateToCompare, "second")) &&
+//                     !e.sentReminder
+//                 ) {
+//                     let userEmail = user.email
+//                     e.sentReminder = true;
+//                     let eventDate = moment.utc(event.start_date).local().format("LLLL");
+//                     let mailOptions = {
+//                         from: "ourmeetingapp@gmail.com",
+//                         to: userEmail,
+//                         subject: `reminder email`,
+//                         text: `Hi there, this email was automatically sent to you as 
+//                         a reminder for the event name ${event.text} on ${eventDate}`
+//                     };
+//                     transporter.sendMail(mailOptions, function (error, info) {
+//                         if (error) {
+//                             console.log("error", error);
+//                         } else {
+//                             console.log("Email successfully sent!");
+//                         }
+//                     });
+//                     e.save();
+//                 }
+//             });
+//         });
+// });
 
 
 module.exports = router;

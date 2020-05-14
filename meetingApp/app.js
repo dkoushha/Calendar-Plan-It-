@@ -31,7 +31,7 @@ const app = express();
 
 //mongoose
 mongoose
-  .connect("mongodb://localhost/meetingapp", {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
