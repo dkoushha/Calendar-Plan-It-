@@ -81,7 +81,7 @@ router.post("/reminder", (req, res) => {
         console.log("alarm", alarm);
         let eventDate = moment.utc(alarm._eventId.start_date).local().format("LLLL");
         let message = `An alarm has been set for a ${alarm._eventId.text} event on ${eventDate} befor ${alarm.duration}`
-        res.redirect("/invite")
+        res.redirect("/invite?valid=" + message);
 
     })
 });

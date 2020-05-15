@@ -2,11 +2,9 @@ const {
   check
 } = require("express-validator");
 const User = require("../models/user.model");
-
 let signUpValidation = [
   check("email")
-  .isEmail()
-  .withMessage("Email is not valid")
+  .isEmail().withMessage("Email is not valid")
   .custom((email) => {
     return User.findOne({
       email: email,

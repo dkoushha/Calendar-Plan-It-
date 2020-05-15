@@ -20,7 +20,7 @@ a {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 85%;
+  height: 88%;
 }
 
 .flex-container {
@@ -135,6 +135,7 @@ body {
 
 .aboutPadding {
   padding: 10px;
+
 }
 
 /* delete if needed */
@@ -256,4 +257,14 @@ footer {
 .option {
   font-size: 14px;
   text-align: center;
+}
+
+/* about page */
+
+.about-container {
+  height: 83%;
+}
+
+.section-about {
+  line-height: 1em;
 }

@@ -20,6 +20,7 @@
         <div class="form-container sign-up-container">
             <form action="/reminder" method="POST">
                 <h1>Set a Reminder</h1>
+                <p id="alarmMessage">{{message}}</p>
                 <h4>Choose an Event</h4>
 
                 <div class="select-dropdown">
@@ -68,7 +69,6 @@
                     <button class="ghost" id="signIn">Invite</button>
                 </div>
                 <div class="overlay-panel overlay-right">
-                    <p>{{message}}</p>
                     <h1>Reminder</h1>
                     <p>Choose an event</p>
                     <button class="ghost" id="signUp">Reminder</button>

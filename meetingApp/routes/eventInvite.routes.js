@@ -41,7 +41,8 @@ router.get("/invite", (req, res) => {
         console.log("outPut: alarmList", alarmList)
         res.render("auth/alert-invite", {
             inviteList: inviteList,
-            alarmList: alarmList
+            alarmList: alarmList,
+            message: req.query.valid,
         });
     });
 })
