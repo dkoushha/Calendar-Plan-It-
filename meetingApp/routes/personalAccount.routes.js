@@ -59,13 +59,13 @@ router.post("/data", (req, res) => {
   // edit an event
   if (mode == "updated") {
     Event.findOne({
-      id: req.body.id
+      id: req.body.id,
     }).then((event) => {
-      if ((req.user.id).localeCompare(event._userId) === 0) {
-        event.text = req.body.text
-        event.start_date = req.body.start_date
-        event.end_date = req.body.end_date
-        event.sentReminder = false
+      if (req.user.id.localeCompare(event._userId) === 0) {
+        event.text = req.body.text;
+        event.start_date = req.body.start_date;
+        event.end_date = req.body.end_date;
+        event.sentReminder = false;
         event.save();
         update_response();
       } else {
@@ -78,13 +78,11 @@ router.post("/data", (req, res) => {
     Event.findOne({
       id: req.body.id,
     }).then((event) => {
-      if ((req.user.id).localeCompare(event._userId) === 0) {
+      if (req.user.id.localeCompare(event._userId) === 0) {
         event.delete();
         update_response();
       } else {
-        event.attendList.pull(
-          (req.user.id)
-        ), event.save();
+        event.attendList.pull(req.user.id), event.save();
         update_response();
       }
     });
@@ -109,7 +107,7 @@ router.get("/personalAccount", checkVerifiedUser, (req, res) => {
   let userEmail = req.user.email.split("@");
   let userName = userEmail[0];
   let userEvents = [];
-  let userInvitedEvent = []
+  let userInvitedEvent = [];
   let timezone = moment.tz.guess();
   Event.find().then((dataToSend) => {
     //console.log('Data',dataToSend);
@@ -117,11 +115,11 @@ router.get("/personalAccount", checkVerifiedUser, (req, res) => {
       //console.log(e._userId);
       if (e._userId == req.user.id) {
         userEvents.push(e);
-        console.log("outPut: userEvents", userEvents)
-      };
+        console.log("outPut: userEvents", userEvents);
+      }
       if (e.attendList.length > 1 && e.attendList.includes(req.user.id)) {
         userInvitedEvent.push(e);
-        console.log("outPut: userInvitedEvent", userInvitedEvent)
+        console.log("outPut: userInvitedEvent", userInvitedEvent);
       }
     });
     res.render("auth/personalAccount", {
@@ -136,63 +134,71 @@ router.get("/personalAccount", checkVerifiedUser, (req, res) => {
 
 router.get("/eventPage/:id", (req, res) => {
   console.log("event id", req.params.id);
-  Promise.all([Event.findOne({
-      _id: req.params.id
-    }).populate("_userId").populate("attendList"), Alarm.findOne({
-      _eventId: req.params.id
-    })])
-    .then((response) => {
-      console.log("outPut: response", response);
-      let userName = (response[0]._userId.email).split("@")[0]
-      console.log("outPut: userName", userName);
-      let userImg = response[0]._userId.image;
-      console.log("outPut: userImg", userImg);
-      let eventName = response[0].text;
-      console.log("outPut: eventName", eventName);
-      let eventStart = moment.utc(response[0].start_date).local().format("LLLL");
-      console.log("outPut: eventStart", eventStart);
-      let eventEnd = moment.utc(response[0].end_date).local().format("LLLL");
-      console.log("outPut: eventEnd", eventEnd);
-      let attendList = response[0].attendList;
-      console.log("outPut: attendList", attendList);
-      let hostName = (attendList[0].email).split("@")[0];
-      console.log("outPut: hostName", hostName);
-      let hostImage = (attendList[0].image);
-      console.log("outPut: hostImage", hostImage);
-      let attendeesImgs = []
-      let attendeesNames = []
-      let name;
-      if (attendList.length > 1) {
-        attendList.map((e) => {
-          attendeesImgs.push(e.image);
-          name = (e.email).split("@")[0];
-          attendeesNames.push(name);
-        })
-      }
-      console.log("outPut: attendeesImgs", attendeesImgs);
-      console.log("outPut: attendeesNames", attendeesNames);
-      let alarm = response[1];
-      let alarmDuration;
-      console.log("alarm._userId", alarm._userId);
-      console.log("response[0]._userId._id", response[0]._userId._id);
-      if ((alarm._userId).localeCompare(response[0]._userId._id) === 0) {
-        alarmDuration = alarm.duration;
-      }
-      console.log("outPut: alarmDuration", alarmDuration);
-
+  Promise.all([
+    Event.findOne({
+      _id: req.params.id,
     })
-  res.render("auth/eventPage", {
-    userName: userName,
-    userImg: userImg,
-    eventName: eventName,
-    eventStart: eventStart,
-    eventEnd: eventEnd,
-    hostName: hostName,
-    hostImage: hostImage,
-    alarmDuration: alarmDuration,
-    attendeesImgs: attendeesImgs,
-    attendeesNames: attendeesNames,
-  })
+    .populate("_userId")
+    .populate("attendList"),
+    Alarm.findOne({
+      _eventId: req.params.id,
+      _userId: req.user._id
+    }),
+  ]).then((response) => {
+    console.log("outPut: response", response);
+    let userName = response[0]._userId.email.split("@")[0];
+    console.log("outPut: userName", userName);
+    let userImg = response[0]._userId.image;
+    console.log("outPut: userImg", userImg);
+    let eventName = response[0].text;
+    console.log("outPut: eventName", eventName);
+    let eventStart = moment.utc(response[0].start_date).local().format("LLLL");
+    console.log("outPut: eventStart", eventStart);
+    let eventEnd = moment.utc(response[0].end_date).local().format("LLLL");
+    console.log("outPut: eventEnd", eventEnd);
+    let attendList = response[0].attendList;
+    console.log("outPut: attendList", attendList);
+    let hostName = attendList[0].email.split("@")[0];
+    console.log("outPut: hostName", hostName);
+    let hostImage = attendList[0].image;
+    console.log("outPut: hostImage", hostImage);
+    let attendeesImgs = [];
+    let attendeesNames = [];
+    let name;
+    if (attendList.length > 1) {
+      attendList.map((e) => {
+        attendeesImgs.push(e.image);
+        name = e.email.split("@")[0];
+        attendeesNames.push(name);
+      });
+    }
+    console.log("outPut: attendeesImgs", attendeesImgs);
+    console.log("outPut: attendeesNames", attendeesNames);
+    let alarmDuration = response[1].duration
+
+    // console.log("alarm._userId", alarm._userId);
+    console.log("response[0]._userId._id", response[0]._userId._id);
+    // let id = response[0]._userId._id;
+    // let id2 = alarm._userId;
+
+    //   if (id2.localeCompare(id) === 0) {
+    //     alarmDuration = alarm.duration;
+    //   }
+    //   console.log("outPut: alarmDuration", alarmDuration);
+    // });
+    res.render("auth/eventPage", {
+      userName: userName,
+      userImg: userImg,
+      eventName: eventName,
+      eventStart: eventStart,
+      eventEnd: eventEnd,
+      hostName: hostName,
+      hostImage: hostImage,
+      alarmDuration: alarmDuration,
+      attendeesImgs: attendeesImgs,
+      attendeesNames: attendeesNames,
+    });
+  });
 })
 
 module.exports = router;
