@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.css" />
 <link rel="stylesheet" href="/stylesheets/style.css">
 
+
 <nav id="navbar">
   <div class="container">
     <!-- Clicking on a logo usually brings the user back to the homepage -->
@@ -29,11 +30,25 @@
 </form>
 </section>
 <p id="welcome-margin-top">{{userName}}</p>
-<p>{{zone.countryName}}-{{zone.zoneName}}</p>
-
-
+<p>{{zone}}</p>
 <br>
 <a id="invite-button" href="/invite">Invite and Reminder</a>
+
+{{!-- start here --}}
+<div class="menu">
+  <button onclick="mobileMenuOpen()" class="dropbtn">Your event details</button>
+  <ul id="gmDropdown" class="dropdown-content">
+    {{#each userEvents}}
+    <li><a href="/eventPage/{{this._id}}">{{this.text}}</a></li>
+    {{/each}}
+    {{#each userInvitedEvent}}
+    <li><a href="/eventPage/{{this._id}}">{{this.text}}</a></li>
+    {{/each}}
+
+  </ul>
+</div>
+
+{{!-- end here --}}
 <div class="date">
   <p id="date"></p>
   <div id="txt"></div>
@@ -60,3 +75,8 @@
 
   <script src="/javascripts/script"></script>
   <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js"></script>
+  <script>
+    function mobileMenuOpen() {
+      document.getElementById("gmDropdown").classList.toggle("show");
+    }
+  </script>

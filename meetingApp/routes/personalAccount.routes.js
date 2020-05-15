@@ -4,6 +4,8 @@ const router = express.Router();
 const User = require("../models/user.model");
 //require event model
 const Event = require("../models/Events.model");
+const Alarm = require("../models/alarm.model");
+
 // require moment.js
 const momentTimezone = require("moment-timezone");
 const moment = require("moment");
@@ -106,26 +108,91 @@ router.post("/data", (req, res) => {
 router.get("/personalAccount", checkVerifiedUser, (req, res) => {
   let userEmail = req.user.email.split("@");
   let userName = userEmail[0];
-  axios
-    .get("http://ip-api.com/json")
-    .then((response) => {
-      let userLat = response.data.lat;
-      let userLon = response.data.lon;
-      //API Key:EUU8LOIMTSKG
-      return axios.get(
-        "http://api.timezonedb.com/v2.1/get-time-zone?key=EUU8LOIMTSKG&format=json&by=position&lat=" +
-        userLat +
-        "&lng=" +
-        userLon
-      );
-    })
-    .then((response) => {
-      res.render("auth/personalAccount", {
-        user: req.user,
-        zone: response.data,
-        userName: userName,
-      });
+  let userEvents = [];
+  let userInvitedEvent = []
+  let timezone = moment.tz.guess();
+  Event.find().then((dataToSend) => {
+    //console.log('Data',dataToSend);
+    dataToSend.forEach((e) => {
+      //console.log(e._userId);
+      if (e._userId == req.user.id) {
+        userEvents.push(e);
+        console.log("outPut: userEvents", userEvents)
+      };
+      if (e.attendList.length > 1 && e.attendList.includes(req.user.id)) {
+        userInvitedEvent.push(e);
+        console.log("outPut: userInvitedEvent", userInvitedEvent)
+      }
     });
+    res.render("auth/personalAccount", {
+      userInvitedEvent: userInvitedEvent,
+      userEvents: userEvents,
+      zone: timezone,
+      userName: userName,
+      user: req.user,
+    });
+  });
 });
+
+router.get("/eventPage/:id", (req, res) => {
+  console.log("event id", req.params.id);
+  Promise.all([Event.findOne({
+      _id: req.params.id
+    }).populate("_userId").populate("attendList"), Alarm.findOne({
+      _eventId: req.params.id
+    })])
+    .then((response) => {
+      console.log("outPut: response", response);
+      let userName = (response[0]._userId.email).split("@")[0]
+      console.log("outPut: userName", userName);
+      let userImg = response[0]._userId.image;
+      console.log("outPut: userImg", userImg);
+      let eventName = response[0].text;
+      console.log("outPut: eventName", eventName);
+      let eventStart = moment.utc(response[0].start_date).local().format("LLLL");
+      console.log("outPut: eventStart", eventStart);
+      let eventEnd = moment.utc(response[0].end_date).local().format("LLLL");
+      console.log("outPut: eventEnd", eventEnd);
+      let attendList = response[0].attendList;
+      console.log("outPut: attendList", attendList);
+      let hostName = (attendList[0].email).split("@")[0];
+      console.log("outPut: hostName", hostName);
+      let hostImage = (attendList[0].image);
+      console.log("outPut: hostImage", hostImage);
+      let attendeesImgs = []
+      let attendeesNames = []
+      let name;
+      if (attendList.length > 1) {
+        attendList.map((e) => {
+          attendeesImgs.push(e.image);
+          name = (e.email).split("@")[0];
+          attendeesNames.push(name);
+        })
+      }
+      console.log("outPut: attendeesImgs", attendeesImgs);
+      console.log("outPut: attendeesNames", attendeesNames);
+      let alarm = response[1];
+      let alarmDuration;
+      console.log("alarm._userId", alarm._userId);
+      console.log("response[0]._userId._id", response[0]._userId._id);
+      if ((alarm._userId).localeCompare(response[0]._userId._id) === 0) {
+        alarmDuration = alarm.duration;
+      }
+      console.log("outPut: alarmDuration", alarmDuration);
+
+    })
+  res.render("auth/eventPage", {
+    userName: userName,
+    userImg: userImg,
+    eventName: eventName,
+    eventStart: eventStart,
+    eventEnd: eventEnd,
+    hostName: hostName,
+    hostImage: hostImage,
+    alarmDuration: alarmDuration,
+    attendeesImgs: attendeesImgs,
+    attendeesNames: attendeesNames,
+  })
+})
 
 module.exports = router;

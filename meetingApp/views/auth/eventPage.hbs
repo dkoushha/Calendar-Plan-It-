@@ -1,0 +1,22 @@
+<h1>{{userName}}</h1>
+<img src="{{userImage}}" alt="">
+
+<h2>{{event.name}}</h2>
+<h4>{{eventStart}}</h4>
+<h4>{{eventEnd}}</h4>
+
+<h3>hosted by</h3>
+<img src="{{hostImage}}" alt="">
+<h5>{{hostName}}</h5>
+
+<h3>Attendees</h3>
+{{#each attendeesImgs}}
+<img src="{{this}}" alt="">
+<h5>name</h5>
+{{#each attendeesNames}}
+<h5>{{this}}</h5>
+{{/each}}
+{{/each}}
+
+
+<h3>Alarm before {{alarm.details}}</h3>

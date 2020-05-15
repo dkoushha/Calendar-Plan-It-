@@ -183,6 +183,69 @@ body {
 
 }
 
+/* dropdown event details */
+.menu {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.dropbtn {
+  cursor: pointer;
+  border-radius: 20px;
+  border: 1px solid #f2a51a;
+  background-color: #f2a51a;
+  color: #393e46;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 10px;
+  letter-spacing: 1px;
+  transition: transform 80ms ease-in;
+  outline: none;
+}
+
+
+.dropbtn:focus {
+  color: #393e46;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 31px;
+  overflow: hidden;
+  list-style-type: none;
+  margin-top: 0;
+  padding-left: 0;
+  border-radius: 20px;
+  border: 1px solid #f2a51a;
+  background-color: #f2a51a;
+  color: #393e46;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: transform 80ms ease-in;
+  z-index: 5;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 7px;
+  text-decoration: none;
+  display: block;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.dropdown-content a:hover {
+  color: #f1f1f1;
+}
+
+.show {
+  display: block;
+}
+
 /* css for alert-invite.hbs */
 .select-dropdown {
   position: relative;
