@@ -145,23 +145,14 @@ router.get("/eventPage/:id", (req, res) => {
       _userId: req.user._id
     }),
   ]).then((response) => {
-    console.log("outPut: response", response);
-    let userName = response[0]._userId.email.split("@")[0];
-    console.log("outPut: userName", userName);
-    let userImg = response[0]._userId.image;
-    console.log("outPut: userImg", userImg);
+    let userName = req.user.email.split("@")[0];
+    let userImg = req.user.image;
     let eventName = response[0].text;
-    console.log("outPut: eventName", eventName);
     let eventStart = moment.utc(response[0].start_date).local().format("LLLL");
-    console.log("outPut: eventStart", eventStart);
     let eventEnd = moment.utc(response[0].end_date).local().format("LLLL");
-    console.log("outPut: eventEnd", eventEnd);
     let attendList = response[0].attendList;
-    console.log("outPut: attendList", attendList);
     let hostName = attendList[0].email.split("@")[0];
-    console.log("outPut: hostName", hostName);
     let hostImage = attendList[0].image;
-    console.log("outPut: hostImage", hostImage);
     let attendeesImgs = [];
     let attendeesNames = [];
     let name;
@@ -172,20 +163,12 @@ router.get("/eventPage/:id", (req, res) => {
         attendeesNames.push(name);
       });
     }
-    console.log("outPut: attendeesImgs", attendeesImgs);
-    console.log("outPut: attendeesNames", attendeesNames);
-    let alarmDuration = response[1].duration
-
-    // console.log("alarm._userId", alarm._userId);
-    console.log("response[0]._userId._id", response[0]._userId._id);
-    // let id = response[0]._userId._id;
-    // let id2 = alarm._userId;
-
-    //   if (id2.localeCompare(id) === 0) {
-    //     alarmDuration = alarm.duration;
-    //   }
-    //   console.log("outPut: alarmDuration", alarmDuration);
-    // });
+    let alarmDuration
+    if (response[1]) {
+      alarmDuration = response[1].duration
+    } else {
+      console.log("object");
+    }
     res.render("auth/eventPage", {
       userName: userName,
       userImg: userImg,

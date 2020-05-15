@@ -16,7 +16,8 @@
 </nav>
 
 <div class="container-content">
-  <img id="profile-img" src={{user.image}} id="profileImg">
+  <img class="profile-img" src={{user.image}} id="profileImg">
+  <h2 id="welcome-margin-top">{{userName}}</h2>
   <section>
     <form action="/upload-profile-img" method="post" enctype="multipart/form-data">
       <input type="file" name="user-img" id="myFile">
@@ -29,7 +30,7 @@
 </div>
 </form>
 </section>
-<p id="welcome-margin-top">{{userName}}</p>
+
 <p>{{zone}}</p>
 <br>
 <a id="invite-button" href="/invite">Invite and Reminder</a>

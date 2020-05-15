@@ -131,6 +131,7 @@ router.post(
 
 //Logout
 router.get("/logout", (req, res) => {
+  console.log("user", req.user);
   req.logOut();
   let message = "Thank you for using our app"
   res.render("auth/signupForm", {

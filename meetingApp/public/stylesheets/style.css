@@ -149,7 +149,7 @@ body {
   align-items: center;
 }
 
-#profile-img {
+.profile-img {
   height: 100px;
   width: auto;
   margin-bottom: 5px;
