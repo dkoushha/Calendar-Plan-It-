@@ -40,10 +40,10 @@
   <button onclick="mobileMenuOpen()" class="dropbtn">Your event details</button>
   <ul id="gmDropdown" class="dropdown-content">
     {{#each userEvents}}
-    <li><a href="/eventPage/{{this._id}}">{{this.text}}</a></li>
+    <li><a class="userEvents" href="/eventPage/{{this._id}}">{{this.text}}</a></li>
     {{/each}}
     {{#each userInvitedEvent}}
-    <li><a href="/eventPage/{{this._id}}">{{this.text}}</a></li>
+    <li><a class="invitedList" href="/eventPage/{{this._id}}">{{this.text}}</a></li>
     {{/each}}
 
   </ul>

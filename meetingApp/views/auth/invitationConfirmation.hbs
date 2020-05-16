@@ -15,9 +15,13 @@
 
 <div class="emailConfirmation-container">
   <div class="flex-container">
+    {{#if inviteEmail}}
     <h2>We sent the invitation email to {{inviteEmail}}</h2>
 
     <a href="https://icons8.com/icon/64300/send-mail"> <img id="image" src="/images/icons8-send-mail.png" alt=""></a>
+    {{else}}
+    <h2>{{message}}</h2>
+    {{/if}}
 
     <a href="/personalAccount" id="linkBackToAccount">Go back to your account</a>
   </div>

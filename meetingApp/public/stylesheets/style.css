@@ -246,6 +246,14 @@ body {
   display: block;
 }
 
+.dropdown-content .userEvents {
+  color: green;
+}
+
+.dropdown-content .invitedList {
+  color: blue;
+}
+
 /* css for alert-invite.hbs */
 .select-dropdown {
   position: relative;

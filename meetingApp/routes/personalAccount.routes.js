@@ -66,8 +66,9 @@ router.post("/data", (req, res) => {
         event.start_date = req.body.start_date;
         event.end_date = req.body.end_date;
         event.sentReminder = false;
-        event.save();
-        update_response();
+        return event.save().then(() => {
+          update_response();
+        })
       } else {
         mode = "error";
         update_response();
@@ -79,8 +80,9 @@ router.post("/data", (req, res) => {
       id: req.body.id,
     }).then((event) => {
       if (req.user.id.localeCompare(event._userId) === 0) {
-        event.delete();
-        update_response();
+        return event.delete().then(() => {
+          update_response();
+        })
       } else {
         event.attendList.pull(req.user.id), event.save();
         update_response();
@@ -116,8 +118,9 @@ router.get("/personalAccount", checkVerifiedUser, (req, res) => {
       if (e._userId == req.user.id) {
         userEvents.push(e);
         console.log("outPut: userEvents", userEvents);
-      }
-      if (e.attendList.length > 1 && e.attendList.includes(req.user.id)) {
+      } else if (e.attendList.length > 1 && e.attendList.includes(req.user.id)) {
+        console.log("e,id,0", e.attendList[0]);
+        console.log("user id", e._userId);
         userInvitedEvent.push(e);
         console.log("outPut: userInvitedEvent", userInvitedEvent);
       }
@@ -157,6 +160,8 @@ router.get("/eventPage/:id", (req, res) => {
     let attendeesNames = [];
     let name;
     if (attendList.length > 1) {
+      attendList.shift()
+      console.log("outPut: attendList", attendList)
       attendList.map((e) => {
         attendeesImgs.push(e.image);
         name = e.email.split("@")[0];
