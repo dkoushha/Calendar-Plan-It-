@@ -110,7 +110,6 @@ router.get("/personalAccount", checkVerifiedUser, (req, res) => {
   let userName = userEmail[0];
   let userEvents = [];
   let userInvitedEvent = [];
-  let timezone = moment.tz.guess();
   Event.find().then((dataToSend) => {
     //console.log('Data',dataToSend);
     dataToSend.forEach((e) => {
@@ -128,7 +127,6 @@ router.get("/personalAccount", checkVerifiedUser, (req, res) => {
     res.render("auth/personalAccount", {
       userInvitedEvent: userInvitedEvent,
       userEvents: userEvents,
-      zone: timezone,
       userName: userName,
       user: req.user,
     });
@@ -152,7 +150,9 @@ router.get("/eventPage/:id", (req, res) => {
     let userImg = req.user.image;
     let eventName = response[0].text;
     let eventStart = moment.utc(response[0].start_date).local().format("LLLL");
+    console.log("outPut: eventStart", eventStart)
     let eventEnd = moment.utc(response[0].end_date).local().format("LLLL");
+    console.log("outPut: eventEnd", eventEnd)
     let attendList = response[0].attendList;
     let hostName = attendList[0].email.split("@")[0];
     let hostImage = attendList[0].image;
