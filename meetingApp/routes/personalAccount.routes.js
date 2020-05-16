@@ -20,10 +20,15 @@ router.get("/data", (req, res) => {
   let dataToClientSide = [];
   Event.find().then((dataToSend) => {
     dataToSend.forEach((e) => {
-      let localTime = moment.utc(e.start_date);
-      let utcTimeEnd = moment.utc(e.end_date);
+      let localTime = moment.utc(e.start_date).local();
+      console.log("outPut: localTime", localTime)
+      let utcTimeEnd = moment.utc(e.end_date).local();
+      console.log("outPut: utcTimeEnd", utcTimeEnd)
       e.start_date = localTime;
       e.end_date = utcTimeEnd;
+      console.log("start from data", e.start_date);
+      console.log("end from data", e.end_date);
+
     });
     dataToSend.forEach((e) => {
       if (e.attendList.includes(req.user.id)) {
@@ -63,6 +68,8 @@ router.post("/data", (req, res) => {
       id: req.body.id,
     }).then((event) => {
       if (req.user.id.localeCompare(event._userId) === 0) {
+        console.log("start", req.body.start_date);
+        console.log("end", req.body.end_date);
         event.text = req.body.text;
         event.start_date = req.body.start_date;
         event.end_date = req.body.end_date;
@@ -91,6 +98,8 @@ router.post("/data", (req, res) => {
     });
     // add a new event
   } else if (mode == "inserted") {
+    console.log("start", req.body.start_date);
+    console.log("end", req.body.end_date);
     let event = new Event({
       id: req.body.id,
       text: req.body.text,
