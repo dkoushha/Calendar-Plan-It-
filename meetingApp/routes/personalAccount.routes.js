@@ -19,11 +19,12 @@ const checkVerifiedUser = require("../helpers/middlewares").checkVerifiedUser;
 router.get("/data", (req, res) => {
   let dataToClientSide = [];
   Event.find().then((dataToSend) => {
-    dataToSend.forEach((e) => {
-      let utcTime = moment.utc(e.start_date);
-      let localTime = utcTime.local();
-      e.start_date = localTime;
-    });
+    // dataToSend.forEach((e) => {
+    //   let localTime = moment.utc(e.start_date).local();
+    //   let utcTimeEnd = moment.utc(e.end_date).local()
+    //   e.start_date = localTime;
+    //   e.end_date = utcTimeEnd
+    // });
     dataToSend.forEach((e) => {
       if (e.attendList.includes(req.user.id)) {
         dataToClientSide.push(e);
@@ -150,9 +151,7 @@ router.get("/eventPage/:id", (req, res) => {
     let userImg = req.user.image;
     let eventName = response[0].text;
     let eventStart = moment.utc(response[0].start_date).local().format("LLLL");
-    console.log("outPut: eventStart", eventStart)
     let eventEnd = moment.utc(response[0].end_date).local().format("LLLL");
-    console.log("outPut: eventEnd", eventEnd)
     let attendList = response[0].attendList;
     let hostName = attendList[0].email.split("@")[0];
     let hostImage = attendList[0].image;
