@@ -100,6 +100,9 @@ router.post("/data", (req, res) => {
   } else if (mode == "inserted") {
     console.log("start", req.body.start_date);
     console.log("end", req.body.end_date);
+    console.log("utc start", moment.utc(req.body.start_date));
+    console.log("utc end", moment.utc(req.body.end_date));
+
     let event = new Event({
       id: req.body.id,
       text: req.body.text,
