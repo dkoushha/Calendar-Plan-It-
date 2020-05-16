@@ -78,7 +78,7 @@
     }
 
     #host img {
-        width: 55px;
+        width: 100px;
     }
 
     #event-details {
@@ -141,7 +141,7 @@
             <div id="host">
                 <h3>Hosted by</h3>
                 <div id="hostContent">
-                    <img src="{{hostImage}}" alt="">
+                    <img class="event-imgs" src="{{hostImage}}" alt="">
                     <h5>{{hostName}}</h5>
                 </div>
             </div>
@@ -151,7 +151,7 @@
                 <div id="attendeesContent">
                     <div id="attendeesImg">
                         {{#each attendeesImgs}}
-                        <img src="{{this}}" alt="">
+                        <img class="event-imgs" src="{{this}}" alt="">
                         {{/each}}
                     </div>
                     <div id="attendeesName">
