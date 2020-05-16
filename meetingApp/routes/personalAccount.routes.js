@@ -19,12 +19,12 @@ const checkVerifiedUser = require("../helpers/middlewares").checkVerifiedUser;
 router.get("/data", (req, res) => {
   let dataToClientSide = [];
   Event.find().then((dataToSend) => {
-    // dataToSend.forEach((e) => {
-    //   let localTime = moment.utc(e.start_date).local();
-    //   let utcTimeEnd = moment.utc(e.end_date).local()
-    //   e.start_date = localTime;
-    //   e.end_date = utcTimeEnd
-    // });
+    dataToSend.forEach((e) => {
+      let localTime = moment.utc(e.start_date).local();
+      let utcTimeEnd = moment.utc(e.end_date).local();
+      e.start_date = localTime;
+      e.end_date = utcTimeEnd
+    });
     dataToSend.forEach((e) => {
       if (e.attendList.includes(req.user.id)) {
         dataToClientSide.push(e);
