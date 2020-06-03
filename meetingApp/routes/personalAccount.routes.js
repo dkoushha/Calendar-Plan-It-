@@ -166,7 +166,7 @@ router.get('/api', (req, res) => {
 
 router.get("/eventPage/:id", (req, res) => {
   let ip = req.headers['x-forwarded-for']
-  console.log("outPut: api", api)
+  console.log("outPut: api", ip)
   console.log("event id", req.params.id);
   Promise.all([
     Event.findOne({
