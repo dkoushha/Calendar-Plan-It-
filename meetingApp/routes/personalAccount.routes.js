@@ -20,17 +20,17 @@ router.get("/data", (req, res) => {
   let dataToClientSide = [];
   Event.find().then((dataToSend) => {
     console.log("outPut: dataToSend", dataToSend)
-    dataToSend.forEach((e) => {
-      let localTime = moment.utc(e.start_date).local();
-      console.log("outPut: localTime start date", localTime)
-      let utcTimeEnd = moment.utc(e.end_date).local();
-      console.log("outPut: local Time end date", utcTimeEnd)
-      e.start_date = localTime;
-      e.end_date = utcTimeEnd;
-      console.log("start from data", e.start_date);
-      console.log("end from data", e.end_date);
+    // dataToSend.forEach((e) => {
+    //   let localTime = moment.utc(e.start_date).local();
+    //   console.log("outPut: localTime start date", localTime)
+    //   let utcTimeEnd = moment.utc(e.end_date).local();
+    //   console.log("outPut: local Time end date", utcTimeEnd)
+    //   e.start_date = localTime;
+    //   e.end_date = utcTimeEnd;
+    //   console.log("start from data", e.start_date);
+    //   console.log("end from data", e.end_date);
 
-    });
+    // });
     dataToSend.forEach((e) => {
       if (e.attendList.includes(req.user.id)) {
         dataToClientSide.push(e);
