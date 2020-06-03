@@ -62,7 +62,6 @@ router.post("/signup", signUpValidation, (req, res) => {
     });
     return token.save()
   }).then((token) => {
-    console.log("outPut: token", token)
     // send a verification email
     const mailOptions = {
       from: "ourmeetingapp@gmail.com",
@@ -95,8 +94,8 @@ router.post("/signup", signUpValidation, (req, res) => {
 router.get("/confirmations/:token", (req, res) => {
   console.log(req.params);
   Token.findOne({
-      token: req.params.token,
-    })
+    token: req.params.token,
+  })
     .then((token) => {
       return User.findOne({
         _id: token._userId

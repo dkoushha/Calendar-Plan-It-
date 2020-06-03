@@ -26,7 +26,6 @@ cron.schedule("* * * * *", function () {
     Alarm.find()
         .populate("_userId").populate("_eventId")
         .then((response) => {
-            console.log("response", response);
             response.forEach((e) => {
                 let event = e._eventId;
                 let user = e._userId;

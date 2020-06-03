@@ -19,11 +19,12 @@ const checkVerifiedUser = require("../helpers/middlewares").checkVerifiedUser;
 router.get("/data", (req, res) => {
   let dataToClientSide = [];
   Event.find().then((dataToSend) => {
+    console.log("outPut: dataToSend", dataToSend)
     dataToSend.forEach((e) => {
       let localTime = moment.utc(e.start_date).local();
-      console.log("outPut: localTime", localTime)
+      console.log("outPut: localTime start date", localTime)
       let utcTimeEnd = moment.utc(e.end_date).local();
-      console.log("outPut: utcTimeEnd", utcTimeEnd)
+      console.log("outPut: local Time end date", utcTimeEnd)
       e.start_date = localTime;
       e.end_date = utcTimeEnd;
       console.log("start from data", e.start_date);
@@ -68,8 +69,6 @@ router.post("/data", (req, res) => {
       id: req.body.id,
     }).then((event) => {
       if (req.user.id.localeCompare(event._userId) === 0) {
-        console.log("start", req.body.start_date);
-        console.log("end", req.body.end_date);
         event.text = req.body.text;
         event.start_date = req.body.start_date;
         event.end_date = req.body.end_date;
@@ -152,8 +151,8 @@ router.get("/eventPage/:id", (req, res) => {
     Event.findOne({
       _id: req.params.id,
     })
-    .populate("_userId")
-    .populate("attendList"),
+      .populate("_userId")
+      .populate("attendList"),
     Alarm.findOne({
       _eventId: req.params.id,
       _userId: req.user._id
