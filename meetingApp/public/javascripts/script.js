@@ -11,8 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
 function init() {
   scheduler.config.server_utc = true;
 
-  // scheduler.init('scheduler_here',new Date(2013,05,11),"week");
-
   // scheduler.config.xml_date = "%Y-%m-%d %H:%i %P";
   scheduler.init("scheduler_here", new Date(), "month");
   // enables the dynamic loading

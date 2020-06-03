@@ -20,17 +20,6 @@ router.get("/data", (req, res) => {
   let dataToClientSide = [];
   Event.find().then((dataToSend) => {
     console.log("outPut: dataToSend", dataToSend)
-    // dataToSend.forEach((e) => {
-    //   let localTime = moment.utc(e.start_date).local();
-    //   console.log("outPut: localTime start date", localTime)
-    //   let utcTimeEnd = moment.utc(e.end_date).local();
-    //   console.log("outPut: local Time end date", utcTimeEnd)
-    //   e.start_date = localTime;
-    //   e.end_date = utcTimeEnd;
-    //   console.log("start from data", e.start_date);
-    //   console.log("end from data", e.end_date);
-
-    // });
     dataToSend.forEach((e) => {
       if (e.attendList.includes(req.user.id)) {
         dataToClientSide.push(e);
@@ -97,11 +86,6 @@ router.post("/data", (req, res) => {
     });
     // add a new event
   } else if (mode == "inserted") {
-    console.log("start", req.body.start_date);
-    console.log("end", req.body.end_date);
-    console.log("utc start", moment.utc(req.body.start_date));
-    console.log("utc end", moment.utc(req.body.end_date));
-
     let event = new Event({
       id: req.body.id,
       text: req.body.text,
@@ -144,24 +128,26 @@ router.get("/personalAccount", checkVerifiedUser, (req, res) => {
     });
   });
 });
-router.get('/api', (req, res) => {
-  console.log(req.ip);
-  console.log(req.connection.remoteAddress);
-  // console.log(req.headers['x-forwarded-for']);
-  let api = req.headers['x-forwarded-for']
-  console.log("outPut: api", api)
-  // let api = https://api.bigdatacloud.net/data/timezone-by-ip?ip=80.134.210.190&utcReference=0&key=[your api key]
 
-  axios.get(`https://api.bigdatacloud.net/data/timezone-by-ip?ip=${api}&utcReference=0&key=2b269298099c48a9a9526382a5ed64c1`).then((response) => {
-    console.log("response", response)
-    res.send('api send')
-  })
-  // axios.get('http://ip-api.com/json').then((response) => {
-  //   console.log('Latitude: ', response.data.lat);
-  //   console.log('Longitude', response.data.lon);
-  //   res.send('api send')
-  // })
-})
+
+// router.get('/api', (req, res) => {
+//   console.log(req.ip);
+//   console.log(req.connection.remoteAddress);
+//   // console.log(req.headers['x-forwarded-for']);
+//   let api = req.headers['x-forwarded-for']
+//   console.log("outPut: api", api)
+//   // let api = https://api.bigdatacloud.net/data/timezone-by-ip?ip=80.134.210.190&utcReference=0&key=[your api key]
+
+//   axios.get(`https://api.bigdatacloud.net/data/timezone-by-ip?ip=${api}&utcReference=0&key=2b269298099c48a9a9526382a5ed64c1`).then((response) => {
+//     console.log("response", response)
+//     res.send('api send')
+//   })
+//   // axios.get('http://ip-api.com/json').then((response) => {
+//   //   console.log('Latitude: ', response.data.lat);
+//   //   console.log('Longitude', response.data.lon);
+//   //   res.send('api send')
+//   // })
+// })
 
 
 router.get("/eventPage/:id", (req, res) => {
@@ -177,14 +163,13 @@ router.get("/eventPage/:id", (req, res) => {
     Alarm.findOne({
       _eventId: req.params.id,
       _userId: req.user._id
-    }), axios.get(`https://api.bigdatacloud.net/data/timezone-by-ip?ip=${ip}&utcReference=0&key=2b269298099c48a9a9526382a5ed64c1`),
+    }), axios.get(`https://api.bigdatacloud.net/data/timezone-by-ip?ip=${ip}&utcReference=0&key=${process.env.API_key}`),
   ]).then((response) => {
     console.log("response", response)
     let userName = req.user.email.split("@")[0];
     let userImg = req.user.image;
     let eventName = response[0].text;
     let eventStart = moment.tz(response[0].start_date, response[2].data.ianaTimeId).format("LLLL");
-    console.log("outPut: eventStart", eventStart)
     let eventEnd = moment.tz(response[0].end_date, response[2].data.ianaTimeId).format("LLLL");
     let attendList = response[0].attendList;
     let hostName = attendList[0].email.split("@")[0];
