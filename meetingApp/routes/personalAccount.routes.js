@@ -165,6 +165,8 @@ router.get('/api', (req, res) => {
 
 
 router.get("/eventPage/:id", (req, res) => {
+  let api = req.headers['x-forwarded-for']
+  console.log("outPut: api", api)
   console.log("event id", req.params.id);
   Promise.all([
     Event.findOne({
@@ -175,13 +177,15 @@ router.get("/eventPage/:id", (req, res) => {
     Alarm.findOne({
       _eventId: req.params.id,
       _userId: req.user._id
-    }),
+    }), axios.get(`https://api.bigdatacloud.net/data/timezone-by-ip?ip=80.134.210.190&utcReference=0&key=2b269298099c48a9a9526382a5ed64c1`),
   ]).then((response) => {
+    console.log("response", response)
     let userName = req.user.email.split("@")[0];
     let userImg = req.user.image;
     let eventName = response[0].text;
-    let eventStart = moment.utc(response[0].start_date).local().format("LLLL");
-    let eventEnd = moment.utc(response[0].end_date).local().format("LLLL");
+    let eventStart = moment.tz(response[0].start_date, response[2].data.ianaTimeId).format("LLLL");
+    console.log("outPut: eventStart", eventStart)
+    let eventEnd = moment.tz(response[0].end_date, response[2].data.ianaTimeId).format("LLLL");
     let attendList = response[0].attendList;
     let hostName = attendList[0].email.split("@")[0];
     let hostImage = attendList[0].image;
