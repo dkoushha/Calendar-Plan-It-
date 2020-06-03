@@ -148,12 +148,17 @@ router.get('/api', (req, res) => {
   console.log(req.ip);
   console.log(req.connection.remoteAddress);
   console.log(req.headers['x-forwarded-for']);
+  // let api = https://api.bigdatacloud.net/data/timezone-by-ip?ip=80.134.210.190&utcReference=0&key=[your api key]
 
-  axios.get('http://ip-api.com/json').then((response) => {
-    console.log('Latitude: ', response.data.lat);
-    console.log('Longitude', response.data.lon);
+  axios.get(`https://api.bigdatacloud.net/data/timezone-by-ip?ip=${req.headers['x-forwarded-for']}&utcReference=0&key=[2b269298099c48a9a9526382a5ed64c1]`).then((response) => {
+    console.log("response", response)
     res.send('api send')
   })
+  // axios.get('http://ip-api.com/json').then((response) => {
+  //   console.log('Latitude: ', response.data.lat);
+  //   console.log('Longitude', response.data.lon);
+  //   res.send('api send')
+  // })
 })
 
 
