@@ -163,7 +163,7 @@ router.get("/eventPage/:id", (req, res) => {
     Alarm.findOne({
       _eventId: req.params.id,
       _userId: req.user._id
-    }), axios.get(`https://api.bigdatacloud.net/data/timezone-by-ip?ip=${ip}&utcReference=0&key=${process.env.API_key}`),
+    }), axios.get(`https://api.bigdatacloud.net/data/timezone-by-ip?ip=${ip}&utcReference=0&key=2b269298099c48a9a9526382a5ed64c1`),
   ]).then((response) => {
     console.log("response", response)
     let userName = req.user.email.split("@")[0];
