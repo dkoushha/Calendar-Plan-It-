@@ -144,6 +144,14 @@ router.get("/personalAccount", checkVerifiedUser, (req, res) => {
     });
   });
 });
+router.get('/api', (req, res) => {
+  axios.get('http://ip-api.com/json').then((response) => {
+    console.log('Latitude: ', response.data.lat);
+    console.log('Longitude', response.data.lon);
+    res.send('api send')
+  })
+})
+
 
 router.get("/eventPage/:id", (req, res) => {
   console.log("event id", req.params.id);
