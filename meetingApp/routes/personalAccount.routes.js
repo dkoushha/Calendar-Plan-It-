@@ -165,7 +165,7 @@ router.get('/api', (req, res) => {
 
 
 router.get("/eventPage/:id", (req, res) => {
-  let api = req.headers['x-forwarded-for']
+  let ip = req.headers['x-forwarded-for']
   console.log("outPut: api", api)
   console.log("event id", req.params.id);
   Promise.all([
@@ -177,7 +177,7 @@ router.get("/eventPage/:id", (req, res) => {
     Alarm.findOne({
       _eventId: req.params.id,
       _userId: req.user._id
-    }), axios.get(`https://api.bigdatacloud.net/data/timezone-by-ip?ip=80.134.210.190&utcReference=0&key=2b269298099c48a9a9526382a5ed64c1`),
+    }), axios.get(`https://api.bigdatacloud.net/data/timezone-by-ip?ip=${ip}&utcReference=0&key=2b269298099c48a9a9526382a5ed64c1`),
   ]).then((response) => {
     console.log("response", response)
     let userName = req.user.email.split("@")[0];
