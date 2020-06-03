@@ -145,6 +145,7 @@ router.get("/personalAccount", checkVerifiedUser, (req, res) => {
   });
 });
 router.get('/api', (req, res) => {
+  console.log(req.ip);
   axios.get('http://ip-api.com/json').then((response) => {
     console.log('Latitude: ', response.data.lat);
     console.log('Longitude', response.data.lon);
