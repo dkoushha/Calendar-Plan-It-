@@ -21,7 +21,6 @@ router.post("/reminder", (req, res) => {
             _userId: req.user.id,
             _eventId: req.body.events
         }
-
         )]).then((response) => {
             console.log("response", response);
             let event = response[0]
